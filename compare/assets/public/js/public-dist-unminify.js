@@ -3,17 +3,18 @@ function stringToBool(t) {
 }
 function clearFileInput(t) {
     if (t.value) {
+        var e, a, n;
         try {
             t.value = "";
-        } catch (t) {}
-        var e, a, n;
+        } catch (i) {}
         t.value && ((e = document.createElement("form")), (a = t.parentNode), (n = t.nextSibling), e.appendChild(t), e.reset(), a.insertBefore(t, n));
     }
 }
 !(function (t, e) {
     "function" == typeof define && define.amd ? define([], e) : "object" == typeof exports ? (module.exports = e()) : (t.Autolinker = e());
 })(this, function () {
-    function t(t) {
+    var t, e, a;
+    function n(t) {
         (this.urls = this.normalizeUrlsCfg((t = t || {}).urls)),
             (this.email = "boolean" != typeof t.email || t.email),
             (this.twitter = "boolean" != typeof t.twitter || t.twitter),
@@ -22,20 +23,19 @@ function clearFileInput(t) {
             (this.newWindow = "boolean" != typeof t.newWindow || t.newWindow),
             (this.stripPrefix = "boolean" != typeof t.stripPrefix || t.stripPrefix);
         var e = this.hashtag;
-        if (!1 !== e && "twitter" !== e && "facebook" !== e && "instagram" !== e) throw new Error("invalid `hashtag` cfg - see docs");
+        if (!1 !== e && "twitter" !== e && "facebook" !== e && "instagram" !== e) throw Error("invalid `hashtag` cfg - see docs");
         (this.truncate = this.normalizeTruncateCfg(t.truncate)), (this.className = t.className || ""), (this.replaceFn = t.replaceFn || null), (this.htmlParser = null), (this.matchers = null), (this.tagBuilder = null);
     }
-    var e, a, n;
     return (
-        (t.prototype = {
-            constructor: t,
+        (n.prototype = {
+            constructor: n,
             normalizeUrlsCfg: function (t) {
                 return "boolean" == typeof (t = null == t || t)
                     ? { schemeMatches: t, wwwMatches: t, tldMatches: t }
                     : { schemeMatches: "boolean" != typeof t.schemeMatches || t.schemeMatches, wwwMatches: "boolean" != typeof t.wwwMatches || t.wwwMatches, tldMatches: "boolean" != typeof t.tldMatches || t.tldMatches };
             },
-            normalizeTruncateCfg: function (e) {
-                return "number" == typeof e ? { length: e, location: "end" } : t.Util.defaults(e || {}, { length: Number.POSITIVE_INFINITY, location: "end" });
+            normalizeTruncateCfg: function (t) {
+                return "number" == typeof t ? { length: t, location: "end" } : n.Util.defaults(t || {}, { length: Number.POSITIVE_INFINITY, location: "end" });
             },
             parse: function (t) {
                 for (var e = this.getHtmlParser().parse(t), a = 0, n = [], i = 0, r = e.length; i < r; i++) {
@@ -52,38 +52,38 @@ function clearFileInput(t) {
                 for (var e = 0; e < t.length - 1; e++) for (var a = t[e], n = a.getOffset() + a.getMatchedText().length; e + 1 < t.length && t[e + 1].getOffset() <= n; ) t.splice(e + 1, 1);
                 return t;
             },
-            removeUnwantedMatches: function (e) {
-                var a = t.Util.remove;
+            removeUnwantedMatches: function (t) {
+                var e = n.Util.remove;
                 return (
                     this.hashtag ||
-                        a(e, function (t) {
+                        e(t, function (t) {
                             return "hashtag" === t.getType();
                         }),
                     this.email ||
-                        a(e, function (t) {
+                        e(t, function (t) {
                             return "email" === t.getType();
                         }),
                     this.phone ||
-                        a(e, function (t) {
+                        e(t, function (t) {
                             return "phone" === t.getType();
                         }),
                     this.twitter ||
-                        a(e, function (t) {
+                        e(t, function (t) {
                             return "twitter" === t.getType();
                         }),
                     this.urls.schemeMatches ||
-                        a(e, function (t) {
+                        e(t, function (t) {
                             return "url" === t.getType() && "scheme" === t.getUrlMatchType();
                         }),
                     this.urls.wwwMatches ||
-                        a(e, function (t) {
+                        e(t, function (t) {
                             return "url" === t.getType() && "www" === t.getUrlMatchType();
                         }),
                     this.urls.tldMatches ||
-                        a(e, function (t) {
+                        e(t, function (t) {
                             return "url" === t.getType() && "tld" === t.getUrlMatchType();
                         }),
-                    e
+                    t
                 );
             },
             parseText: function (t, e) {
@@ -102,38 +102,40 @@ function clearFileInput(t) {
                 }
                 return a.push(t.substring(n)), a.join("");
             },
-            createMatchReturnVal: function (e) {
-                var a;
-                return "string" == typeof (a = this.replaceFn ? this.replaceFn.call(this, this, e) : a) ? a : !1 === a ? e.getMatchedText() : (a instanceof t.HtmlTag ? a : e.buildTag()).toAnchorString();
+            createMatchReturnVal: function (t) {
+                var e;
+                return "string" == typeof (e = this.replaceFn ? this.replaceFn.call(this, this, t) : e) ? e : !1 === e ? t.getMatchedText() : (e instanceof n.HtmlTag ? e : t.buildTag()).toAnchorString();
             },
             getHtmlParser: function () {
-                return this.htmlParser || (this.htmlParser = new t.htmlParser.HtmlParser());
+                return this.htmlParser || (this.htmlParser = new n.htmlParser.HtmlParser());
             },
             getMatchers: function () {
                 if (this.matchers) return this.matchers;
-                var e = t.matcher,
-                    a = this.getTagBuilder();
-                a = [
-                    new e.Hashtag({ tagBuilder: a, serviceName: this.hashtag }),
-                    new e.Email({ tagBuilder: a }),
-                    new e.Phone({ tagBuilder: a }),
-                    new e.Twitter({ tagBuilder: a }),
-                    new e.Url({ tagBuilder: a, stripPrefix: this.stripPrefix }),
-                ];
-                return (this.matchers = a);
+                var t = n.matcher,
+                    e = this.getTagBuilder();
+                return (
+                    (e = [
+                        new t.Hashtag({ tagBuilder: e, serviceName: this.hashtag }),
+                        new t.Email({ tagBuilder: e }),
+                        new t.Phone({ tagBuilder: e }),
+                        new t.Twitter({ tagBuilder: e }),
+                        new t.Url({ tagBuilder: e, stripPrefix: this.stripPrefix }),
+                    ]),
+                    (this.matchers = e)
+                );
             },
             getTagBuilder: function () {
-                return this.tagBuilder || (this.tagBuilder = new t.AnchorTagBuilder({ newWindow: this.newWindow, truncate: this.truncate, className: this.className }));
+                return this.tagBuilder || (this.tagBuilder = new n.AnchorTagBuilder({ newWindow: this.newWindow, truncate: this.truncate, className: this.className }));
             },
         }),
-        (t.link = function (e, a) {
-            return new t(a).link(e);
+        (n.link = function (t, e) {
+            return new n(e).link(t);
         }),
-        (t.match = {}),
-        (t.matcher = {}),
-        (t.htmlParser = {}),
-        (t.truncate = {}),
-        (t.Util = {
+        (n.match = {}),
+        (n.matcher = {}),
+        (n.htmlParser = {}),
+        (n.truncate = {}),
+        (n.Util = {
             abstractMethod: function () {
                 throw "abstract";
             },
@@ -146,20 +148,20 @@ function clearFileInput(t) {
                 for (var a in e) e.hasOwnProperty(a) && void 0 === t[a] && (t[a] = e[a]);
                 return t;
             },
-            extend: function (e, a) {
-                var n = e.prototype,
+            extend: function (t, e) {
+                var a = t.prototype,
                     i = function () {};
                 return (
-                    (i.prototype = n),
-                    ((i = (e = a.hasOwnProperty("constructor")
-                        ? a.constructor
+                    (i.prototype = a),
+                    ((i = (t = e.hasOwnProperty("constructor")
+                        ? e.constructor
                         : function () {
-                              n.constructor.apply(this, arguments);
-                          }).prototype = new i()).constructor = e),
-                    (i.superclass = n),
-                    delete a.constructor,
-                    t.Util.assign(i, a),
-                    e
+                              a.constructor.apply(this, arguments);
+                          }).prototype = new i()).constructor = t),
+                    (i.superclass = a),
+                    delete e.constructor,
+                    n.Util.assign(i, e),
+                    t
                 );
             },
             ellipsis: function (t, e, a) {
@@ -181,10 +183,10 @@ function clearFileInput(t) {
                 return t.replace(this.trimRegex, "");
             },
         }),
-        (t.HtmlTag = t.Util.extend(Object, {
+        (n.HtmlTag = n.Util.extend(Object, {
             whitespaceRegex: /\s+/,
-            constructor: function (e) {
-                t.Util.assign(this, e), (this.innerHtml = this.innerHtml || this.innerHTML);
+            constructor: function (t) {
+                n.Util.assign(this, t), (this.innerHtml = this.innerHtml || this.innerHTML);
             },
             setTagName: function (t) {
                 return (this.tagName = t), this;
@@ -198,9 +200,9 @@ function clearFileInput(t) {
             getAttr: function (t) {
                 return this.getAttrs()[t];
             },
-            setAttrs: function (e) {
-                var a = this.getAttrs();
-                return t.Util.assign(a, e), this;
+            setAttrs: function (t) {
+                var e = this.getAttrs();
+                return n.Util.assign(e, t), this;
             },
             getAttrs: function () {
                 return this.attrs || (this.attrs = {});
@@ -208,13 +210,13 @@ function clearFileInput(t) {
             setClass: function (t) {
                 return this.setAttr("class", t);
             },
-            addClass: function (e) {
-                for (var a, n = this.getClass(), i = this.whitespaceRegex, r = t.Util.indexOf, o = n ? n.split(i) : [], s = e.split(i); (a = s.shift()); ) -1 === r(o, a) && o.push(a);
+            addClass: function (t) {
+                for (var e, a = this.getClass(), i = this.whitespaceRegex, r = n.Util.indexOf, o = a ? a.split(i) : [], s = t.split(i); (e = s.shift()); ) -1 === r(o, e) && o.push(e);
                 return (this.getAttrs().class = o.join(" ")), this;
             },
-            removeClass: function (e) {
-                for (var a, n = this.getClass(), i = this.whitespaceRegex, r = t.Util.indexOf, o = n ? n.split(i) : [], s = e.split(i); o.length && (a = s.shift()); ) {
-                    var l = r(o, a);
+            removeClass: function (t) {
+                for (var e, a = this.getClass(), i = this.whitespaceRegex, r = n.Util.indexOf, o = a ? a.split(i) : [], s = t.split(i); o.length && (e = s.shift()); ) {
+                    var l = r(o, e);
                     -1 !== l && o.splice(l, 1);
                 }
                 return (this.getAttrs().class = o.join(" ")), this;
@@ -245,18 +247,18 @@ function clearFileInput(t) {
                 return a.join(" ");
             },
         })),
-        (t.RegexLib = {
-            alphaNumericCharsStr: (n =
-                "A-Za-zªµºÀ-ÖØ-öø-ˁˆ-ˑˠ-ˤˬˮͰ-ʹͶͷͺ-ͽͿΆΈ-ΊΌΎ-ΡΣ-ϵϷ-ҁҊ-ԯԱ-Ֆՙա-ևא-תװ-ײؠ-يٮٯٱ-ۓەۥۦۮۯۺ-ۼۿܐܒ-ܯݍ-ޥޱߊ-ߪߴߵߺࠀ-ࠕࠚࠤࠨࡀ-ࡘࢠ-ࢴऄ-हऽॐक़-ॡॱ-ঀঅ-ঌএঐও-নপ-রলশ-হঽৎড়ঢ়য়-ৡৰৱਅ-ਊਏਐਓ-ਨਪ-ਰਲਲ਼ਵਸ਼ਸਹਖ਼-ੜਫ਼ੲ-ੴઅ-ઍએ-ઑઓ-નપ-રલળવ-હઽૐૠૡૹଅ-ଌଏଐଓ-ନପ-ରଲଳଵ-ହଽଡ଼ଢ଼ୟ-ୡୱஃஅ-ஊஎ-ஐஒ-கஙசஜஞடணதந-பம-ஹௐఅ-ఌఎ-ఐఒ-నప-హఽౘ-ౚౠౡಅ-ಌಎ-ಐಒ-ನಪ-ಳವ-ಹಽೞೠೡೱೲഅ-ഌഎ-ഐഒ-ഺഽൎൟ-ൡൺ-ൿඅ-ඖක-නඳ-රලව-ෆก-ะาำเ-ๆກຂຄງຈຊຍດ-ທນ-ຟມ-ຣລວສຫອ-ະາຳຽເ-ໄໆໜ-ໟༀཀ-ཇཉ-ཬྈ-ྌက-ဪဿၐ-ၕၚ-ၝၡၥၦၮ-ၰၵ-ႁႎႠ-ჅჇჍა-ჺჼ-ቈቊ-ቍቐ-ቖቘቚ-ቝበ-ኈኊ-ኍነ-ኰኲ-ኵኸ-ኾዀዂ-ዅወ-ዖዘ-ጐጒ-ጕጘ-ፚᎀ-ᎏᎠ-Ᏽᏸ-ᏽᐁ-ᙬᙯ-ᙿᚁ-ᚚᚠ-ᛪᛱ-ᛸᜀ-ᜌᜎ-ᜑᜠ-ᜱᝀ-ᝑᝠ-ᝬᝮ-ᝰក-ឳៗៜᠠ-ᡷᢀ-ᢨᢪᢰ-ᣵᤀ-ᤞᥐ-ᥭᥰ-ᥴᦀ-ᦫᦰ-ᧉᨀ-ᨖᨠ-ᩔᪧᬅ-ᬳᭅ-ᭋᮃ-ᮠᮮᮯᮺ-ᯥᰀ-ᰣᱍ-ᱏᱚ-ᱽᳩ-ᳬᳮ-ᳱᳵᳶᴀ-ᶿḀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼιῂ-ῄῆ-ῌῐ-ΐῖ-Ίῠ-Ῥῲ-ῴῶ-ῼⁱⁿₐ-ₜℂℇℊ-ℓℕℙ-ℝℤΩℨK-ℭℯ-ℹℼ-ℿⅅ-ⅉⅎↃↄⰀ-Ⱞⰰ-ⱞⱠ-ⳤⳫ-ⳮⳲⳳⴀ-ⴥⴧⴭⴰ-ⵧⵯⶀ-ⶖⶠ-ⶦⶨ-ⶮⶰ-ⶶⶸ-ⶾⷀ-ⷆⷈ-ⷎⷐ-ⷖⷘ-ⷞⸯ々〆〱-〵〻〼ぁ-ゖゝ-ゟァ-ヺー-ヿㄅ-ㄭㄱ-ㆎㆠ-ㆺㇰ-ㇿ㐀-䶵一-鿕ꀀ-ꒌꓐ-ꓽꔀ-ꘌꘐ-ꘟꘪꘫꙀ-ꙮꙿ-ꚝꚠ-ꛥꜗ-ꜟꜢ-ꞈꞋ-ꞭꞰ-ꞷꟷ-ꠁꠃ-ꠅꠇ-ꠊꠌ-ꠢꡀ-ꡳꢂ-ꢳꣲ-ꣷꣻꣽꤊ-ꤥꤰ-ꥆꥠ-ꥼꦄ-ꦲꧏꧠ-ꧤꧦ-ꧯꧺ-ꧾꨀ-ꨨꩀ-ꩂꩄ-ꩋꩠ-ꩶꩺꩾ-ꪯꪱꪵꪶꪹ-ꪽꫀꫂꫛ-ꫝꫠ-ꫪꫲ-ꫴꬁ-ꬆꬉ-ꬎꬑ-ꬖꬠ-ꬦꬨ-ꬮꬰ-ꭚꭜ-ꭥꭰ-ꯢ가-힣ힰ-ퟆퟋ-ퟻ豈-舘並-龎ﬀ-ﬆﬓ-ﬗיִײַ-ﬨשׁ-זּטּ-לּמּנּסּףּפּצּ-ﮱﯓ-ﴽﵐ-ﶏﶒ-ﷇﷰ-ﷻﹰ-ﹴﹶ-ﻼＡ-Ｚａ-ｚｦ-ﾾￂ-ￇￊ-ￏￒ-ￗￚ-ￜ0-9٠-٩۰-۹߀-߉०-९০-৯੦-੯૦-૯୦-୯௦-௯౦-౯೦-೯൦-൯෦-෯๐-๙໐-໙༠-༩၀-၉႐-႙០-៩᠐-᠙᥆-᥏᧐-᧙᪀-᪉᪐-᪙᭐-᭙᮰-᮹᱀-᱉᱐-᱙꘠-꘩꣐-꣙꤀-꤉꧐-꧙꧰-꧹꩐-꩙꯰-꯹０-９"),
-            domainNameRegex: new RegExp("[" + n + ".\\-]*[" + n + "\\-]"),
+        (n.RegexLib = {
+            alphaNumericCharsStr: (a =
+                "A-Za-z\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-ˁˆ-ˑˠ-ˤˬˮͰ-ʹͶͷͺ-ͽͿΆΈ-ΊΌΎ-ΡΣ-ϵϷ-ҁҊ-ԯԱ-Ֆՙա-ևא-תװ-ײؠ-يٮٯٱ-ۓەۥۦۮۯۺ-ۼۿܐܒ-ܯݍ-ޥޱߊ-ߪߴߵߺࠀ-ࠕࠚࠤࠨࡀ-ࡘࢠ-ࢴऄ-हऽॐक़-ॡॱ-ঀঅ-ঌএঐও-নপ-রলশ-হঽৎড়ঢ়য়-ৡৰৱਅ-ਊਏਐਓ-ਨਪ-ਰਲਲ਼ਵਸ਼ਸਹਖ਼-ੜਫ਼ੲ-ੴઅ-ઍએ-ઑઓ-નપ-રલળવ-હઽૐૠૡૹଅ-ଌଏଐଓ-ନପ-ରଲଳଵ-ହଽଡ଼ଢ଼ୟ-ୡୱஃஅ-ஊஎ-ஐஒ-கஙசஜஞடணதந-பம-ஹௐఅ-ఌఎ-ఐఒ-నప-హఽౘ-ౚౠౡಅ-ಌಎ-ಐಒ-ನಪ-ಳವ-ಹಽೞೠೡೱೲഅ-ഌഎ-ഐഒ-ഺഽൎൟ-ൡൺ-ൿඅ-ඖක-නඳ-රලව-ෆก-ะาำเ-ๆກຂຄງຈຊຍດ-ທນ-ຟມ-ຣລວສຫອ-ະາຳຽເ-ໄໆໜ-ໟༀཀ-ཇཉ-ཬྈ-ྌက-ဪဿၐ-ၕၚ-ၝၡၥၦၮ-ၰၵ-ႁႎႠ-ჅჇჍა-ჺჼ-ቈቊ-ቍቐ-ቖቘቚ-ቝበ-ኈኊ-ኍነ-ኰኲ-ኵኸ-ኾዀዂ-ዅወ-ዖዘ-ጐጒ-ጕጘ-ፚᎀ-ᎏᎠ-Ᏽᏸ-ᏽᐁ-ᙬᙯ-ᙿᚁ-ᚚᚠ-ᛪᛱ-ᛸᜀ-ᜌᜎ-ᜑᜠ-ᜱᝀ-ᝑᝠ-ᝬᝮ-ᝰក-ឳៗៜᠠ-ᡷᢀ-ᢨᢪᢰ-ᣵᤀ-ᤞᥐ-ᥭᥰ-ᥴᦀ-ᦫᦰ-ᧉᨀ-ᨖᨠ-ᩔᪧᬅ-ᬳᭅ-ᭋᮃ-ᮠᮮᮯᮺ-ᯥᰀ-ᰣᱍ-ᱏᱚ-ᱽᳩ-ᳬᳮ-ᳱᳵᳶᴀ-ᶿḀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼιῂ-ῄῆ-ῌῐ-ΐῖ-Ίῠ-Ῥῲ-ῴῶ-ῼⁱⁿₐ-ₜℂℇℊ-ℓℕℙ-ℝℤΩℨK-ℭℯ-ℹℼ-ℿⅅ-ⅉⅎↃↄⰀ-Ⱞⰰ-ⱞⱠ-ⳤⳫ-ⳮⳲⳳⴀ-ⴥⴧⴭⴰ-ⵧⵯⶀ-ⶖⶠ-ⶦⶨ-ⶮⶰ-ⶶⶸ-ⶾⷀ-ⷆⷈ-ⷎⷐ-ⷖⷘ-ⷞⸯ々〆〱-〵〻〼ぁ-ゖゝ-ゟァ-ヺー-ヿㄅ-ㄭㄱ-ㆎㆠ-ㆺㇰ-ㇿ㐀-䶵一-鿕ꀀ-ꒌꓐ-ꓽꔀ-ꘌꘐ-ꘟꘪꘫꙀ-ꙮꙿ-ꚝꚠ-ꛥꜗ-ꜟꜢ-ꞈꞋ-ꞭꞰ-ꞷꟷ-ꠁꠃ-ꠅꠇ-ꠊꠌ-ꠢꡀ-ꡳꢂ-ꢳꣲ-ꣷꣻꣽꤊ-ꤥꤰ-ꥆꥠ-ꥼꦄ-ꦲꧏꧠ-ꧤꧦ-ꧯꧺ-ꧾꨀ-ꨨꩀ-ꩂꩄ-ꩋꩠ-ꩶꩺꩾ-ꪯꪱꪵꪶꪹ-ꪽꫀꫂꫛ-ꫝꫠ-ꫪꫲ-ꫴꬁ-ꬆꬉ-ꬎꬑ-ꬖꬠ-ꬦꬨ-ꬮꬰ-ꭚꭜ-ꭥꭰ-ꯢ가-힣ힰ-ퟆퟋ-ퟻ豈-舘並-龎ﬀ-ﬆﬓ-ﬗיִײַ-ﬨשׁ-זּטּ-לּמּנּסּףּפּצּ-ﮱﯓ-ﴽﵐ-ﶏﶒ-ﷇﷰ-ﷻﹰ-ﹴﹶ-ﻼＡ-Ｚａ-ｚｦ-ﾾￂ-ￇￊ-ￏￒ-ￗￚ-ￜ0-9٠-٩۰-۹߀-߉०-९০-৯੦-੯૦-૯୦-୯௦-௯౦-౯೦-೯൦-൯෦-෯๐-๙໐-໙༠-༩၀-၉႐-႙០-៩᠐-᠙᥆-᥏᧐-᧙᪀-᪉᪐-᪙᭐-᭙᮰-᮹᱀-᱉᱐-᱙꘠-꘩꣐-꣙꤀-꤉꧐-꧙꧰-꧹꩐-꩙꯰-꯹０-９"),
+            domainNameRegex: RegExp("[" + a + ".\\-]*[" + a + "\\-]"),
             tldRegex: /(?:international|construction|contractors|enterprises|photography|productions|foundation|immobilien|industries|management|properties|technology|christmas|community|directory|education|equipment|institute|marketing|solutions|vacations|bargains|boutique|builders|catering|cleaning|clothing|computer|democrat|diamonds|graphics|holdings|lighting|partners|plumbing|supplies|training|ventures|academy|careers|company|cruises|domains|exposed|flights|florist|gallery|guitars|holiday|kitchen|neustar|okinawa|recipes|rentals|reviews|shiksha|singles|support|systems|agency|berlin|camera|center|coffee|condos|dating|estate|events|expert|futbol|kaufen|luxury|maison|monash|museum|nagoya|photos|repair|report|social|supply|tattoo|tienda|travel|viajes|villas|vision|voting|voyage|actor|build|cards|cheap|codes|dance|email|glass|house|mango|ninja|parts|photo|press|shoes|solar|today|tokyo|tools|watch|works|aero|arpa|asia|best|bike|blue|buzz|camp|club|cool|coop|farm|fish|gift|guru|info|jobs|kiwi|kred|land|limo|link|menu|mobi|moda|name|pics|pink|post|qpon|rich|ruhr|sexy|tips|vote|voto|wang|wien|wiki|zone|bar|bid|biz|cab|cat|ceo|com|edu|gov|int|kim|mil|net|onl|org|pro|pub|red|tel|uno|wed|xxx|xyz|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|za|zm|zw)\b/,
         }),
-        (t.AnchorTagBuilder = t.Util.extend(Object, {
-            constructor: function (e) {
-                t.Util.assign(this, e);
+        (n.AnchorTagBuilder = n.Util.extend(Object, {
+            constructor: function (t) {
+                n.Util.assign(this, t);
             },
-            build: function (e) {
-                return new t.HtmlTag({ tagName: "a", attrs: this.createAttrs(e.getType(), e.getAnchorHref()), innerHtml: this.processAnchorText(e.getAnchorText()) });
+            build: function (t) {
+                return new n.HtmlTag({ tagName: "a", attrs: this.createAttrs(t.getType(), t.getAnchorHref()), innerHtml: this.processAnchorText(t.getAnchorText()) });
             },
             createAttrs: function (t, e) {
                 return (e = { href: e }), (t = this.createCssClass(t)) && (e.class = t), this.newWindow && (e.target = "_blank"), e;
@@ -268,90 +270,88 @@ function clearFileInput(t) {
             processAnchorText: function (t) {
                 return this.doTruncate(t);
             },
-            doTruncate: function (e) {
-                if (!(a = this.truncate)) return e;
-                var a,
-                    n = a.length;
-                return "smart" === (a = a.location) ? t.truncate.TruncateSmart(e, n, "..") : "middle" === a ? t.truncate.TruncateMiddle(e, n, "..") : t.truncate.TruncateEnd(e, n, "..");
+            doTruncate: function (t) {
+                if (!(e = this.truncate)) return t;
+                var e,
+                    a = e.length;
+                return "smart" === (e = e.location) ? n.truncate.TruncateSmart(t, a, "..") : "middle" === e ? n.truncate.TruncateMiddle(t, a, "..") : n.truncate.TruncateEnd(t, a, "..");
             },
         })),
-        (t.htmlParser.HtmlParser = t.Util.extend(Object, {
-            htmlRegex:
-                ((a = /[^\s\0"'>\/=\x01-\x1F\x7F]+/.source + "(?:\\s*=\\s*" + (e = /(?:"[^"]*?"|'[^']*?'|[^'"=<>`\s]+)/).source + ")?"),
-                new RegExp(
-                    [
-                        "(?:",
-                        "<(!DOCTYPE)",
-                        "(?:",
-                        "\\s+",
-                        "(?:",
-                        a,
-                        "|",
-                        e.source + ")",
-                        ")*",
-                        ">",
-                        ")",
-                        "|",
-                        "(?:",
-                        "<(/)?",
-                        "(?:",
-                        /!--([\s\S]+?)--/.source,
-                        "|",
-                        "(?:",
-                        "(" + /[0-9a-zA-Z][0-9a-zA-Z:]*/.source + ")",
-                        "(?:",
-                        "\\s*",
-                        a,
-                        ")*",
-                        "\\s*/?",
-                        ")",
-                        ")",
-                        ">",
-                        ")",
-                    ].join(""),
-                    "gi"
-                )),
+        (n.htmlParser.HtmlParser = n.Util.extend(Object, {
+            htmlRegex: RegExp(
+                [
+                    "(?:",
+                    "<(!DOCTYPE)",
+                    "(?:",
+                    "\\s+",
+                    "(?:",
+                    (e = /[^\s\0"'>\/=\x01-\x1F\x7F]+/.source + "(?:\\s*=\\s*" + (t = /(?:"[^"]*?"|'[^']*?'|[^'"=<>`\s]+)/).source + ")?"),
+                    "|",
+                    t.source + ")",
+                    ")*",
+                    ">",
+                    ")",
+                    "|",
+                    "(?:",
+                    "<(/)?",
+                    "(?:",
+                    /!--([\s\S]+?)--/.source,
+                    "|",
+                    "(?:",
+                    "(" + /[0-9a-zA-Z][0-9a-zA-Z:]*/.source + ")",
+                    "(?:",
+                    "\\s*",
+                    e,
+                    ")*",
+                    "\\s*/?",
+                    ")",
+                    ")",
+                    ">",
+                    ")",
+                ].join(""),
+                "gi"
+            ),
             htmlCharacterEntitiesRegex: /(&nbsp;|&#160;|&lt;|&#60;|&gt;|&#62;|&quot;|&#34;|&#39;)/gi,
             parse: function (t) {
-                for (var e, a, n = this.htmlRegex, i = 0, r = []; null !== (h = n.exec(t)); ) {
-                    var o = h[0],
-                        s = h[3],
-                        l = h[1] || h[4],
-                        c = !!h[2],
-                        d = h.index,
-                        h = t.substring(i, d);
-                    h && ((e = this.parseTextAndEntityNodes(i, h)), r.push.apply(r, e)), s ? r.push(this.createCommentNode(d, o, s)) : r.push(this.createElementNode(d, o, l, c)), (i = d + o.length);
+                for (var e, a, n = this.htmlRegex, i = 0, r = []; null !== (d = n.exec(t)); ) {
+                    var o = d[0],
+                        s = d[3],
+                        l = d[1] || d[4],
+                        c = !!d[2],
+                        h = d.index,
+                        d = t.substring(i, h);
+                    d && ((e = this.parseTextAndEntityNodes(i, d)), r.push.apply(r, e)), s ? r.push(this.createCommentNode(h, o, s)) : r.push(this.createElementNode(h, o, l, c)), (i = h + o.length);
                 }
                 return i < t.length && (a = t.substring(i)) && ((e = this.parseTextAndEntityNodes(i, a)), r.push.apply(r, e)), r;
             },
-            parseTextAndEntityNodes: function (e, a) {
-                for (var n = [], i = t.Util.splitAndCapture(a, this.htmlCharacterEntitiesRegex), r = 0, o = i.length; r < o; r += 2) {
+            parseTextAndEntityNodes: function (t, e) {
+                for (var a = [], i = n.Util.splitAndCapture(e, this.htmlCharacterEntitiesRegex), r = 0, o = i.length; r < o; r += 2) {
                     var s = i[r],
                         l = i[r + 1];
-                    s && (n.push(this.createTextNode(e, s)), (e += s.length)), l && (n.push(this.createEntityNode(e, l)), (e += l.length));
+                    s && (a.push(this.createTextNode(t, s)), (t += s.length)), l && (a.push(this.createEntityNode(t, l)), (t += l.length));
                 }
-                return n;
+                return a;
             },
-            createCommentNode: function (e, a, n) {
-                return new t.htmlParser.CommentNode({ offset: e, text: a, comment: t.Util.trim(n) });
+            createCommentNode: function (t, e, a) {
+                return new n.htmlParser.CommentNode({ offset: t, text: e, comment: n.Util.trim(a) });
             },
-            createElementNode: function (e, a, n, i) {
-                return new t.htmlParser.ElementNode({ offset: e, text: a, tagName: n.toLowerCase(), closing: i });
+            createElementNode: function (t, e, a, i) {
+                return new n.htmlParser.ElementNode({ offset: t, text: e, tagName: a.toLowerCase(), closing: i });
             },
-            createEntityNode: function (e, a) {
-                return new t.htmlParser.EntityNode({ offset: e, text: a });
+            createEntityNode: function (t, e) {
+                return new n.htmlParser.EntityNode({ offset: t, text: e });
             },
-            createTextNode: function (e, a) {
-                return new t.htmlParser.TextNode({ offset: e, text: a });
+            createTextNode: function (t, e) {
+                return new n.htmlParser.TextNode({ offset: t, text: e });
             },
         })),
-        (t.htmlParser.HtmlNode = t.Util.extend(Object, {
+        (n.htmlParser.HtmlNode = n.Util.extend(Object, {
             offset: void 0,
             text: void 0,
-            constructor: function (e) {
-                t.Util.assign(this, e);
+            constructor: function (t) {
+                n.Util.assign(this, t);
             },
-            getType: t.Util.abstractMethod,
+            getType: n.Util.abstractMethod,
             getOffset: function () {
                 return this.offset;
             },
@@ -359,7 +359,7 @@ function clearFileInput(t) {
                 return this.text;
             },
         })),
-        (t.htmlParser.CommentNode = t.Util.extend(t.htmlParser.HtmlNode, {
+        (n.htmlParser.CommentNode = n.Util.extend(n.htmlParser.HtmlNode, {
             comment: "",
             getType: function () {
                 return "comment";
@@ -368,7 +368,7 @@ function clearFileInput(t) {
                 return this.comment;
             },
         })),
-        (t.htmlParser.ElementNode = t.Util.extend(t.htmlParser.HtmlNode, {
+        (n.htmlParser.ElementNode = n.Util.extend(n.htmlParser.HtmlNode, {
             tagName: "",
             closing: !1,
             getType: function () {
@@ -381,21 +381,21 @@ function clearFileInput(t) {
                 return this.closing;
             },
         })),
-        (t.htmlParser.EntityNode = t.Util.extend(t.htmlParser.HtmlNode, {
+        (n.htmlParser.EntityNode = n.Util.extend(n.htmlParser.HtmlNode, {
             getType: function () {
                 return "entity";
             },
         })),
-        (t.htmlParser.TextNode = t.Util.extend(t.htmlParser.HtmlNode, {
+        (n.htmlParser.TextNode = n.Util.extend(n.htmlParser.HtmlNode, {
             getType: function () {
                 return "text";
             },
         })),
-        (t.match.Match = t.Util.extend(Object, {
+        (n.match.Match = n.Util.extend(Object, {
             constructor: function (t) {
                 (this.tagBuilder = t.tagBuilder), (this.matchedText = t.matchedText), (this.offset = t.offset);
             },
-            getType: t.Util.abstractMethod,
+            getType: n.Util.abstractMethod,
             getMatchedText: function () {
                 return this.matchedText;
             },
@@ -405,15 +405,15 @@ function clearFileInput(t) {
             getOffset: function () {
                 return this.offset;
             },
-            getAnchorHref: t.Util.abstractMethod,
-            getAnchorText: t.Util.abstractMethod,
+            getAnchorHref: n.Util.abstractMethod,
+            getAnchorText: n.Util.abstractMethod,
             buildTag: function () {
                 return this.tagBuilder.build(this);
             },
         })),
-        (t.match.Email = t.Util.extend(t.match.Match, {
-            constructor: function (e) {
-                t.match.Match.prototype.constructor.call(this, e), (this.email = e.email);
+        (n.match.Email = n.Util.extend(n.match.Match, {
+            constructor: function (t) {
+                n.match.Match.prototype.constructor.call(this, t), (this.email = t.email);
             },
             getType: function () {
                 return "email";
@@ -428,9 +428,9 @@ function clearFileInput(t) {
                 return this.email;
             },
         })),
-        (t.match.Hashtag = t.Util.extend(t.match.Match, {
-            constructor: function (e) {
-                t.match.Match.prototype.constructor.call(this, e), (this.serviceName = e.serviceName), (this.hashtag = e.hashtag);
+        (n.match.Hashtag = n.Util.extend(n.match.Match, {
+            constructor: function (t) {
+                n.match.Match.prototype.constructor.call(this, t), (this.serviceName = t.serviceName), (this.hashtag = t.hashtag);
             },
             getType: function () {
                 return "hashtag";
@@ -452,16 +452,16 @@ function clearFileInput(t) {
                     case "instagram":
                         return "https://instagram.com/explore/tags/" + e;
                     default:
-                        throw new Error("Unknown service name to point hashtag to: ", t);
+                        throw Error("Unknown service name to point hashtag to: ", t);
                 }
             },
             getAnchorText: function () {
                 return "#" + this.hashtag;
             },
         })),
-        (t.match.Phone = t.Util.extend(t.match.Match, {
-            constructor: function (e) {
-                t.match.Match.prototype.constructor.call(this, e), (this.number = e.number), (this.plusSign = e.plusSign);
+        (n.match.Phone = n.Util.extend(n.match.Match, {
+            constructor: function (t) {
+                n.match.Match.prototype.constructor.call(this, t), (this.number = t.number), (this.plusSign = t.plusSign);
             },
             getType: function () {
                 return "phone";
@@ -476,9 +476,9 @@ function clearFileInput(t) {
                 return this.matchedText;
             },
         })),
-        (t.match.Twitter = t.Util.extend(t.match.Match, {
-            constructor: function (e) {
-                t.match.Match.prototype.constructor.call(this, e), (this.twitterHandle = e.twitterHandle);
+        (n.match.Twitter = n.Util.extend(n.match.Match, {
+            constructor: function (t) {
+                n.match.Match.prototype.constructor.call(this, t), (this.twitterHandle = t.twitterHandle);
             },
             getType: function () {
                 return "twitter";
@@ -493,14 +493,14 @@ function clearFileInput(t) {
                 return "@" + this.twitterHandle;
             },
         })),
-        (t.match.Url = t.Util.extend(t.match.Match, {
-            constructor: function (e) {
-                t.match.Match.prototype.constructor.call(this, e),
-                    (this.urlMatchType = e.urlMatchType),
-                    (this.url = e.url),
-                    (this.protocolUrlMatch = e.protocolUrlMatch),
-                    (this.protocolRelativeMatch = e.protocolRelativeMatch),
-                    (this.stripPrefix = e.stripPrefix);
+        (n.match.Url = n.Util.extend(n.match.Match, {
+            constructor: function (t) {
+                n.match.Match.prototype.constructor.call(this, t),
+                    (this.urlMatchType = t.urlMatchType),
+                    (this.url = t.url),
+                    (this.protocolUrlMatch = t.protocolUrlMatch),
+                    (this.protocolRelativeMatch = t.protocolRelativeMatch),
+                    (this.stripPrefix = t.stripPrefix);
             },
             urlPrefixRegex: /^(https?:\/\/)?(www\.)?/i,
             protocolRelativeRegex: /^\/\//,
@@ -532,120 +532,119 @@ function clearFileInput(t) {
                 return "/" === t.charAt(t.length - 1) ? t.slice(0, -1) : t;
             },
         })),
-        (t.matcher.Matcher = t.Util.extend(Object, {
+        (n.matcher.Matcher = n.Util.extend(Object, {
             constructor: function (t) {
                 this.tagBuilder = t.tagBuilder;
             },
-            parseMatches: t.Util.abstractMethod,
+            parseMatches: n.Util.abstractMethod,
         })),
-        (t.matcher.Email = t.Util.extend(t.matcher.Matcher, {
-            matcherRegex: ((n = t.RegexLib.alphaNumericCharsStr), (e = new RegExp("[" + n + "\\-;:&=+$.,]+@")), (a = t.RegexLib.domainNameRegex), (n = t.RegexLib.tldRegex), new RegExp([e.source, a.source, "\\.", n.source].join(""), "gi")),
-            parseMatches: function (e) {
-                for (var a, n = this.matcherRegex, i = this.tagBuilder, r = []; null !== (a = n.exec(e)); ) {
-                    var o = a[0];
-                    r.push(new t.match.Email({ tagBuilder: i, matchedText: o, offset: a.index, email: o }));
+        (n.matcher.Email = n.Util.extend(n.matcher.Matcher, {
+            matcherRegex: ((t = RegExp("[" + (a = n.RegexLib.alphaNumericCharsStr) + "\\-;:&=+$.,]+@")), (e = n.RegexLib.domainNameRegex), (a = n.RegexLib.tldRegex), RegExp([t.source, e.source, "\\.", a.source].join(""), "gi")),
+            parseMatches: function (t) {
+                for (var e, a = this.matcherRegex, i = this.tagBuilder, r = []; null !== (e = a.exec(t)); ) {
+                    var o = e[0];
+                    r.push(new n.match.Email({ tagBuilder: i, matchedText: o, offset: e.index, email: o }));
                 }
                 return r;
             },
         })),
-        (t.matcher.Hashtag = t.Util.extend(t.matcher.Matcher, {
-            matcherRegex: new RegExp("#[_" + t.RegexLib.alphaNumericCharsStr + "]{1,139}", "g"),
-            nonWordCharRegex: new RegExp("[^" + t.RegexLib.alphaNumericCharsStr + "]"),
-            constructor: function (e) {
-                t.matcher.Matcher.prototype.constructor.call(this, e), (this.serviceName = e.serviceName);
+        (n.matcher.Hashtag = n.Util.extend(n.matcher.Matcher, {
+            matcherRegex: RegExp("#[_" + n.RegexLib.alphaNumericCharsStr + "]{1,139}", "g"),
+            nonWordCharRegex: RegExp("[^" + n.RegexLib.alphaNumericCharsStr + "]"),
+            constructor: function (t) {
+                n.matcher.Matcher.prototype.constructor.call(this, t), (this.serviceName = t.serviceName);
             },
-            parseMatches: function (e) {
-                for (var a = this.matcherRegex, n = this.nonWordCharRegex, i = this.serviceName, r = this.tagBuilder, o = []; null !== (s = a.exec(e)); ) {
+            parseMatches: function (t) {
+                for (var e = this.matcherRegex, a = this.nonWordCharRegex, i = this.serviceName, r = this.tagBuilder, o = []; null !== (s = e.exec(t)); ) {
                     var s,
                         l = s.index,
-                        c = e.charAt(l - 1);
-                    (0 !== l && !n.test(c)) || ((c = s[0]), (s = s[0].slice(1)), o.push(new t.match.Hashtag({ tagBuilder: r, matchedText: c, offset: l, serviceName: i, hashtag: s })));
+                        c = t.charAt(l - 1);
+                    (0 === l || a.test(c)) && ((c = s[0]), (s = s[0].slice(1)), o.push(new n.match.Hashtag({ tagBuilder: r, matchedText: c, offset: l, serviceName: i, hashtag: s })));
                 }
                 return o;
             },
         })),
-        (t.matcher.Phone = t.Util.extend(t.matcher.Matcher, {
+        (n.matcher.Phone = n.Util.extend(n.matcher.Matcher, {
             matcherRegex: /(?:(\+)?\d{1,3}[-\040.])?\(?\d{3}\)?[-\040.]?\d{3}[-\040.]\d{4}/g,
-            parseMatches: function (e) {
-                for (var a, n = this.matcherRegex, i = this.tagBuilder, r = []; null !== (a = n.exec(e)); ) {
-                    var o = a[0],
+            parseMatches: function (t) {
+                for (var e, a = this.matcherRegex, i = this.tagBuilder, r = []; null !== (e = a.exec(t)); ) {
+                    var o = e[0],
                         s = o.replace(/\D/g, ""),
-                        l = !!a[1];
-                    r.push(new t.match.Phone({ tagBuilder: i, matchedText: o, offset: a.index, number: s, plusSign: l }));
+                        l = !!e[1];
+                    r.push(new n.match.Phone({ tagBuilder: i, matchedText: o, offset: e.index, number: s, plusSign: l }));
                 }
                 return r;
             },
         })),
-        (t.matcher.Twitter = t.Util.extend(t.matcher.Matcher, {
-            matcherRegex: new RegExp("@[_" + t.RegexLib.alphaNumericCharsStr + "]{1,20}", "g"),
-            nonWordCharRegex: new RegExp("[^" + t.RegexLib.alphaNumericCharsStr + "]"),
-            parseMatches: function (e) {
-                for (var a = this.matcherRegex, n = this.nonWordCharRegex, i = this.tagBuilder, r = []; null !== (o = a.exec(e)); ) {
+        (n.matcher.Twitter = n.Util.extend(n.matcher.Matcher, {
+            matcherRegex: RegExp("@[_" + n.RegexLib.alphaNumericCharsStr + "]{1,20}", "g"),
+            nonWordCharRegex: RegExp("[^" + n.RegexLib.alphaNumericCharsStr + "]"),
+            parseMatches: function (t) {
+                for (var e = this.matcherRegex, a = this.nonWordCharRegex, i = this.tagBuilder, r = []; null !== (o = e.exec(t)); ) {
                     var o,
                         s = o.index,
-                        l = e.charAt(s - 1);
-                    (0 !== s && !n.test(l)) || ((l = o[0]), (o = o[0].slice(1)), r.push(new t.match.Twitter({ tagBuilder: i, matchedText: l, offset: s, twitterHandle: o })));
+                        l = t.charAt(s - 1);
+                    (0 === s || a.test(l)) && ((l = o[0]), (o = o[0].slice(1)), r.push(new n.match.Twitter({ tagBuilder: i, matchedText: l, offset: s, twitterHandle: o })));
                 }
                 return r;
             },
         })),
-        (t.matcher.Url = t.Util.extend(t.matcher.Matcher, {
+        (n.matcher.Url = n.Util.extend(n.matcher.Matcher, {
             matcherRegex:
-                ((e = t.RegexLib.domainNameRegex),
-                (a = t.RegexLib.tldRegex),
-                (n = t.RegexLib.alphaNumericCharsStr),
-                (n = new RegExp("[" + n + "\\-+&@#/%=~_()|'$*\\[\\]?!:,.;]*[" + n + "\\-+&@#/%=~_()|'$*\\[\\]]")),
-                new RegExp(
+                ((t = n.RegexLib.domainNameRegex),
+                (e = n.RegexLib.tldRegex),
+                (a = RegExp("[" + (a = n.RegexLib.alphaNumericCharsStr) + "\\-+&@#/%=~_()|'$*\\[\\]?!:,.;]*[" + a + "\\-+&@#/%=~_()|'$*\\[\\]]")),
+                RegExp(
                     [
                         "(?:",
                         "(",
                         /(?:[A-Za-z][-.+A-Za-z0-9]*:(?![A-Za-z][-.+A-Za-z0-9]*:\/\/)(?!\d+\/?)(?:\/\/)?)/.source,
-                        e.source,
+                        t.source,
                         ")",
                         "|",
                         "(",
                         "(//)?",
                         /(?:www\.)/.source,
-                        e.source,
+                        t.source,
                         ")",
                         "|",
                         "(",
                         "(//)?",
-                        e.source + "\\.",
-                        a.source,
+                        t.source + "\\.",
+                        e.source,
                         ")",
                         ")",
-                        "(?:" + n.source + ")?",
+                        "(?:" + a.source + ")?",
                     ].join(""),
                     "gi"
                 )),
             wordCharRegExp: /\w/,
             openParensRe: /\(/g,
             closeParensRe: /\)/g,
-            constructor: function (e) {
-                t.matcher.Matcher.prototype.constructor.call(this, e), (this.stripPrefix = e.stripPrefix);
+            constructor: function (t) {
+                n.matcher.Matcher.prototype.constructor.call(this, t), (this.stripPrefix = t.stripPrefix);
             },
-            parseMatches: function (e) {
-                for (var a = this.matcherRegex, n = this.stripPrefix, i = this.tagBuilder, r = []; null !== (h = a.exec(e)); ) {
-                    var o = h[0],
-                        s = h[1],
-                        l = h[2],
-                        c = h[3],
-                        d = h[5],
-                        h = h.index;
-                    (c = c || d), (d = e.charAt(h - 1));
-                    t.matcher.UrlMatchValidator.isValid(o, s) &&
-                        !((0 < h && "@" === d) || (0 < h && c && this.wordCharRegExp.test(d))) &&
-                        (this.matchHasUnbalancedClosingParen(o) ? (o = o.substr(0, o.length - 1)) : -1 < (d = this.matchHasInvalidCharAfterTld(o, s)) && (o = o.substr(0, d)),
-                        r.push(new t.match.Url({ tagBuilder: i, matchedText: o, offset: h, urlMatchType: s ? "scheme" : l ? "www" : "tld", url: o, protocolUrlMatch: !!s, protocolRelativeMatch: !!c, stripPrefix: n })));
+            parseMatches: function (t) {
+                for (var e = this.matcherRegex, a = this.stripPrefix, i = this.tagBuilder, r = []; null !== (d = e.exec(t)); ) {
+                    var o = d[0],
+                        s = d[1],
+                        l = d[2],
+                        c = d[3],
+                        h = d[5],
+                        d = d.index;
+                    (c = c || h),
+                        (h = t.charAt(d - 1)),
+                        n.matcher.UrlMatchValidator.isValid(o, s) &&
+                            !((0 < d && "@" === h) || (0 < d && c && this.wordCharRegExp.test(h))) &&
+                            (this.matchHasUnbalancedClosingParen(o) ? (o = o.substr(0, o.length - 1)) : -1 < (h = this.matchHasInvalidCharAfterTld(o, s)) && (o = o.substr(0, h)),
+                            r.push(new n.match.Url({ tagBuilder: i, matchedText: o, offset: d, urlMatchType: s ? "scheme" : l ? "www" : "tld", url: o, protocolUrlMatch: !!s, protocolRelativeMatch: !!c, stripPrefix: a })));
                 }
                 return r;
             },
             matchHasUnbalancedClosingParen: function (t) {
                 if (")" === t.charAt(t.length - 1)) {
                     var e = t.match(this.openParensRe);
-                    t = t.match(this.closeParensRe);
-                    if (((e && e.length) || 0) < ((t && t.length) || 0)) return !0;
+                    if (((t = t.match(this.closeParensRe)), ((e && e.length) || 0) < ((t && t.length) || 0))) return !0;
                 }
                 return !1;
             },
@@ -658,7 +657,7 @@ function clearFileInput(t) {
                 );
             },
         })),
-        (t.matcher.UrlMatchValidator = {
+        (n.matcher.UrlMatchValidator = {
             hasFullProtocolRegex: /^[A-Za-z][-.+A-Za-z0-9]*:\/\//,
             uriSchemeRegex: /^[A-Za-z][-.+A-Za-z0-9]*:/,
             hasWordCharAfterProtocolRegex: /:[^\s]*?[A-Za-z\u00C0-\u017F]/,
@@ -675,21 +674,20 @@ function clearFileInput(t) {
                 return !(!t || !e || this.hasWordCharAfterProtocolRegex.test(t));
             },
         }),
-        (t.truncate.TruncateEnd = function (e, a, n) {
-            return t.Util.ellipsis(e, a, n);
+        (n.truncate.TruncateEnd = function (t, e, a) {
+            return n.Util.ellipsis(t, e, a);
         }),
-        (t.truncate.TruncateMiddle = function (t, e, a) {
+        (n.truncate.TruncateMiddle = function (t, e, a) {
             if (t.length <= e) return t;
             var n = e - a.length,
                 i = "";
             return 0 < n && (i = t.substr(-1 * Math.floor(n / 2))), (t.substr(0, Math.ceil(n / 2)) + a + i).substr(0, e);
         }),
-        (t.truncate.TruncateSmart = function (t, e, a) {
+        (n.truncate.TruncateSmart = function (t, e, a) {
             function n(t, e) {
                 var n = e / 2,
                     i = Math.ceil(n);
-                (e = -1 * Math.floor(n)), (n = "");
-                return e < 0 && (n = t.substr(e)), t.substr(0, i) + a + n;
+                return (e = -1 * Math.floor(n)), (n = ""), e < 0 && (n = t.substr(e)), t.substr(0, i) + a + n;
             }
             var i = function (t) {
                 var e = "";
@@ -708,25 +706,25 @@ function clearFileInput(t) {
                     (r = s.match(/^\?(.*?)(?=(#|$))/i)) && ((o.query = r[1]), (s = s.substr(r[0].length))),
                     (r = s.match(/^#(.*?)$/i)) && (o.fragment = r[1]),
                     o);
-            if ((!c.query || ((d = c.query.match(/^(.*?)(?=(\?|\#))(.*?)$/i)) && ((c.query = c.query.substr(0, d[1].length)), (t = i(c)))), t.length <= e)) return t;
-            if ((c.host && ((c.host = c.host.replace(/^www\./, "")), (t = i(c))), t.length <= e)) return t;
-            var d = "";
-            if ((c.host && (d += c.host), d.length >= l)) return (c.host.length == e ? c.host.substr(0, e - a.length) + a : n(d, l)).substr(0, e);
+            if ((!c.query || ((h = c.query.match(/^(.*?)(?=(\?|\#))(.*?)$/i)) && ((c.query = c.query.substr(0, h[1].length)), (t = i(c)))), t.length <= e || (c.host && ((c.host = c.host.replace(/^www\./, "")), (t = i(c))), t.length <= e)))
+                return t;
+            var h = "";
+            if ((c.host && (h += c.host), h.length >= l)) return (c.host.length == e ? c.host.substr(0, e - a.length) + a : n(h, l)).substr(0, e);
             if (((i = ""), c.path && (i += "/" + c.path), c.query && (i += "?" + c.query), i)) {
-                if (l <= (d + i).length) return (d + i).length == e ? (d + i).substr(0, e) : (d + n(i, l - d.length)).substr(0, e);
-                d += i;
+                if (l <= (h + i).length) return (h + i).length == e ? (h + i).substr(0, e) : (h + n(i, l - h.length)).substr(0, e);
+                h += i;
             }
             if (c.fragment) {
-                if (l <= (d + (i = "#" + c.fragment)).length) return (d + i).length == e ? (d + i).substr(0, e) : (d + n(i, l - d.length)).substr(0, e);
-                d += i;
+                if (l <= (h + (i = "#" + c.fragment)).length) return (h + i).length == e ? (h + i).substr(0, e) : (h + n(i, l - h.length)).substr(0, e);
+                h += i;
             }
             if (c.scheme && c.host) {
-                var h = c.scheme + "://";
-                if ((d + h).length < l) return (h + d).substr(0, e);
+                var d = c.scheme + "://";
+                if ((h + d).length < l) return (d + h).substr(0, e);
             }
-            return d.length <= e ? d : ((h = ""), 0 < l && (h = d.substr(-1 * Math.floor(l / 2))), (d.substr(0, Math.ceil(l / 2)) + a + h).substr(0, e));
+            return h.length <= e ? h : ((d = ""), 0 < l && (d = h.substr(-1 * Math.floor(l / 2))), (h.substr(0, Math.ceil(l / 2)) + a + d).substr(0, e));
         }),
-        t
+        n
     );
 }),
     (function (t) {
@@ -832,10 +830,10 @@ function clearFileInput(t) {
                 if ((!o && r in n && ((o = n[r]), (r = a.target && i)), (r = r || e("href") || ""), !o)) for (var s in n) a[s] && ((o = n[s]), (r = a[s]));
                 if (!o) {
                     var l = r;
-                    r = null;
                     if (
-                        (t.each(a.contentFilters, function () {
-                            return (o = n[this]), !(r = !(r = o.test ? o.test(l) : r) && o.regex && l.match && l.match(o.regex) ? l : r);
+                        ((r = null),
+                        t.each(a.contentFilters, function () {
+                            return !(r = !(r = (o = n[this]).test ? o.test(l) : r) && o.regex && l.match && l.match(o.regex) ? l : r);
                         }),
                         !r)
                     )
@@ -965,7 +963,7 @@ function clearFileInput(t) {
                                         (function (t, e) {
                                             var a,
                                                 n = {},
-                                                i = new RegExp("^iframe([A-Z])(.*)");
+                                                i = RegExp("^iframe([A-Z])(.*)");
                                             for (a in t) {
                                                 var r = a.match(i);
                                                 r && (n[(r[1] + r[2].replace(/([A-Z])/g, "-$1")).toLowerCase()] = t[a]);
@@ -989,7 +987,7 @@ function clearFileInput(t) {
                 functionAttributes: ["beforeOpen", "afterOpen", "beforeContent", "afterContent", "beforeClose", "afterClose"],
                 readElementConfig: function (e, a) {
                     var n = this,
-                        i = new RegExp("^data-" + a + "-(.*)"),
+                        i = RegExp("^data-" + a + "-(.*)"),
                         r = {};
                     return (
                         e &&
@@ -998,11 +996,11 @@ function clearFileInput(t) {
                                 if ((a = this.name.match(i))) {
                                     var e = this.value,
                                         a = t.camelCase(a[1]);
-                                    if (0 <= t.inArray(a, n.functionAttributes)) e = new Function(e);
+                                    if (0 <= t.inArray(a, n.functionAttributes)) e = Function(e);
                                     else
                                         try {
                                             e = t.parseJSON(e);
-                                        } catch (a) {}
+                                        } catch (o) {}
                                     r[a] = e;
                                 }
                             }),
@@ -1100,8 +1098,8 @@ function clearFileInput(t) {
             var s = o.options,
                 l = s.classes,
                 c = s.events,
-                d = s.triggers,
-                h = 0;
+                h = s.triggers,
+                d = 0;
             return (
                 (o.timers = {
                     resize: new a(),
@@ -1126,40 +1124,40 @@ function clearFileInput(t) {
                             return t.width - e.width;
                         }),
                             n
-                                .unbind(d.initialize)
-                                .on(d.initialize, function () {
-                                    n.removeData("footable_info"), n.data("breakpoint", ""), n.trigger(d.resize), n.removeClass(l.loading), n.addClass(l.loaded).addClass(l.main), o.raise(c.initialized);
+                                .unbind(h.initialize)
+                                .on(h.initialize, function () {
+                                    n.removeData("footable_info"), n.data("breakpoint", ""), n.trigger(h.resize), n.removeClass(l.loading), n.addClass(l.loaded).addClass(l.main), o.raise(c.initialized);
                                 })
-                                .unbind(d.redraw)
-                                .on(d.redraw, function () {
+                                .unbind(h.redraw)
+                                .on(h.redraw, function () {
                                     o.redraw();
                                 })
-                                .unbind(d.resize)
-                                .on(d.resize, function () {
+                                .unbind(h.resize)
+                                .on(h.resize, function () {
                                     o.resize();
                                 })
-                                .unbind(d.expandFirstRow)
-                                .on(d.expandFirstRow, function () {
+                                .unbind(h.expandFirstRow)
+                                .on(h.expandFirstRow, function () {
                                     n.find(s.toggleSelector)
                                         .first()
                                         .not("." + l.detailShow)
-                                        .trigger(d.toggleRow);
+                                        .trigger(h.toggleRow);
                                 })
-                                .unbind(d.expandAll)
-                                .on(d.expandAll, function () {
+                                .unbind(h.expandAll)
+                                .on(h.expandAll, function () {
                                     n.find(s.toggleSelector)
                                         .not("." + l.detailShow)
-                                        .trigger(d.toggleRow);
+                                        .trigger(h.toggleRow);
                                 })
-                                .unbind(d.collapseAll)
-                                .on(d.collapseAll, function () {
-                                    n.find("." + l.detailShow).trigger(d.toggleRow);
+                                .unbind(h.collapseAll)
+                                .on(h.collapseAll, function () {
+                                    n.find("." + l.detailShow).trigger(h.toggleRow);
                                 }),
-                            n.trigger(d.initialize),
+                            n.trigger(h.initialize),
                             a.on("resize.footable", function () {
                                 o.timers.resize.stop(),
                                     o.timers.resize.start(function () {
-                                        o.raise(d.resize);
+                                        o.raise(h.resize);
                                     }, s.delay);
                             });
                     }
@@ -1210,7 +1208,7 @@ function clearFileInput(t) {
                             i,
                             r = o.columns[e];
                         null !== r.className &&
-                            ((i = !(n = "")),
+                            ((i = ((n = ""), !0)),
                             t.each(r.matches, function (t, e) {
                                 i || (n += ", "), (n += "> tbody > tr:not(." + l.detail + ") > td:nth-child(" + (parseInt(e, 10) + 1) + ")"), (i = !1);
                             }),
@@ -1225,8 +1223,8 @@ function clearFileInput(t) {
                     o.hasAnyBreakpointColumn() &&
                         (e
                             .find(s.toggleSelector)
-                            .unbind(d.toggleRow)
-                            .on(d.toggleRow, function () {
+                            .unbind(h.toggleRow)
+                            .on(h.toggleRow, function () {
                                 var e = t(this).is("tr") ? t(this) : t(this).parents("tr:first");
                                 o.toggleDetail(e);
                             }),
@@ -1234,7 +1232,7 @@ function clearFileInput(t) {
                             .find(s.toggleSelector)
                             .unbind("click.footable")
                             .on("click.footable", function (a) {
-                                e.is(".breakpoint") && t(a.target).is("td,th,." + l.toggle) && t(this).trigger(d.toggleRow);
+                                e.is(".breakpoint") && t(a.target).is("td,th,." + l.toggle) && t(this).trigger(h.toggleRow);
                             }));
                 }),
                 (o.parse = function (t, e) {
@@ -1244,10 +1242,10 @@ function clearFileInput(t) {
                     var a = t(e),
                         n = a.data("hide"),
                         i = a.index();
-                    n = n || "";
-                    n = jQuery.map(n.split(","), function (t) {
-                        return jQuery.trim(t);
-                    });
+                    (n = n || ""),
+                        (n = jQuery.map(n.split(","), function (t) {
+                            return jQuery.trim(t);
+                        }));
                     var r = {
                         index: i,
                         hide: {},
@@ -1268,13 +1266,13 @@ function clearFileInput(t) {
                             .first()),
                         (r.groupName = o.parse(l, { type: "alpha" })));
                     var l = parseInt(a.prev().attr("colspan") || 0, 10);
-                    h += 1 < l ? l - 1 : 0;
-                    var d = parseInt(a.attr("colspan") || 0, 10),
-                        u = r.index + h;
-                    if (1 < d) {
-                        var p = a.data("names");
-                        p = (p = p || "").split(",");
-                        for (var f = 0; f < d; f++) r.matches.push(f + u), p.length > f && (r.names[f + u] = p[f]);
+                    d += 1 < l ? l - 1 : 0;
+                    var h = parseInt(a.attr("colspan") || 0, 10),
+                        u = r.index + d;
+                    if (1 < h) {
+                        var f = a.data("names");
+                        f = (f = f || "").split(",");
+                        for (var p = 0; p < h; p++) r.matches.push(p + u), f.length > p && (r.names[p + u] = f[p]);
                     } else r.matches.push(u);
                     r.hide.default = "all" === a.data("hide") || 0 <= t.inArray("default", n);
                     var g,
@@ -1302,7 +1300,7 @@ function clearFileInput(t) {
                 }),
                 (o.resize = function () {
                     var e = t(o.table);
-                    if (e.is(":visible"))
+                    if (e.is(":visible")) {
                         if (o.hasAnyBreakpointColumn()) {
                             var a = { width: e.width(), viewportWidth: o.getViewportWidth(), parentWidth: e.parent().width() },
                                 n = ((a = o.calculateWidth(e, a)), e.data("footable_info"));
@@ -1313,17 +1311,18 @@ function clearFileInput(t) {
                                         break;
                                     }
                                 var l = null === r ? "default" : r.name,
-                                    h = o.hasBreakpointColumn(l),
+                                    d = o.hasBreakpointColumn(l),
                                     u = e.data("breakpoint");
                                 e
                                     .data("breakpoint", l)
                                     .removeClass("default breakpoint")
                                     .removeClass(o.breakpointNames)
-                                    .addClass(l + (h ? " breakpoint" : "")),
-                                    l !== u && (e.trigger(d.redraw), o.raise(c.breakpoint, { breakpoint: l, info: a }));
+                                    .addClass(l + (d ? " breakpoint" : "")),
+                                    l !== u && (e.trigger(h.redraw), o.raise(c.breakpoint, { breakpoint: l, info: a }));
                             }
                             o.raise(c.resized, { old: n, info: a });
-                        } else e.trigger(d.redraw);
+                        } else e.trigger(h.redraw);
+                    }
                 }),
                 (o.redraw = function () {
                     o.addRowToggle(), o.bindToggleSelectors(), o.setColumnClasses();
@@ -1385,15 +1384,14 @@ function clearFileInput(t) {
                 }),
                 (o.toggleDetail = function (e) {
                     var a = e.jquery ? e : t(e);
-                    e = a.next();
-                    a.hasClass(l.detailShow)
-                        ? (a.removeClass(l.detailShow), e.hasClass(l.detail) && e.hide(), o.raise(c.rowCollapsed, { row: a[0] }))
-                        : (o.createOrUpdateDetailRow(a[0]), a.addClass(l.detailShow).next().show(), o.raise(c.rowExpanded, { row: a[0] }));
+                    (e = a.next()),
+                        a.hasClass(l.detailShow)
+                            ? (a.removeClass(l.detailShow), e.hasClass(l.detail) && e.hide(), o.raise(c.rowCollapsed, { row: a[0] }))
+                            : (o.createOrUpdateDetailRow(a[0]), a.addClass(l.detailShow).next().show(), o.raise(c.rowExpanded, { row: a[0] }));
                 }),
                 (o.removeRow = function (e) {
                     var a = e.jquery ? e : t(e);
-                    e = (a = a.hasClass(l.detail) ? a.prev() : a).next();
-                    !0 === a.data("detail_created") && e.remove(), a.remove(), o.raise(c.rowRemoved);
+                    (e = (a = a.hasClass(l.detail) ? a.prev() : a).next()), !0 === a.data("detail_created") && e.remove(), a.remove(), o.raise(c.rowRemoved);
                 }),
                 (o.appendRow = function (e) {
                     (e = e.jquery ? e : t(e)), t(o.table).find("tbody").append(e), o.redraw();
@@ -1413,8 +1411,8 @@ function clearFileInput(t) {
                         n = a.next(),
                         i = [];
                     if (!0 === a.data("detail_created")) return !0;
-                    if (a.is(":hidden")) return !1;
                     if (
+                        a.is(":hidden") ||
                         (o.raise(c.rowDetailUpdating, { row: a, detail: n }),
                         a.find("> td:hidden").each(function () {
                             var e = t(this).index(),
@@ -1455,7 +1453,7 @@ function clearFileInput(t) {
                 (o.reset = function () {
                     var e = t(o.table);
                     e.removeData("footable_info").data("breakpoint", "").removeClass(l.loading).removeClass(l.loaded),
-                        e.find(s.toggleSelector).unbind(d.toggleRow).unbind("click.footable"),
+                        e.find(s.toggleSelector).unbind(h.toggleRow).unbind("click.footable"),
                         e.find("> tbody > tr").removeClass(l.detailShow),
                         e.find("> tbody > tr." + l.detail).remove(),
                         o.raise(c.reset);
@@ -1479,15 +1477,17 @@ function clearFileInput(t) {
                         return t(e).data("value") || t.trim(t(e).text());
                     },
                     numeric: function (e) {
-                        return (
-                            (e =
-                                t(e).data("value") ||
-                                t(e)
-                                    .text()
-                                    .replace(/[^0-9.\-]/g, "")),
-                            (e = parseFloat(e)),
-                            isNaN(e) ? 0 : e
-                        );
+                        return isNaN(
+                            (e = parseFloat(
+                                (e =
+                                    t(e).data("value") ||
+                                    t(e)
+                                        .text()
+                                        .replace(/[^0-9.\-]/g, ""))
+                            ))
+                        )
+                            ? 0
+                            : e;
                     },
                 },
                 addRowToggle: !0,
@@ -1574,7 +1574,7 @@ function clearFileInput(t) {
                     return e.footable.version.major + "." + e.footable.version.minor;
                 },
                 parse: function (t) {
-                    return (t = /(\d+)\.?(\d+)?\.?(\d+)?/.exec(t)), { major: parseInt(t[1], 10) || 0, minor: parseInt(t[2], 10) || 0, patch: parseInt(t[3], 10) || 0 };
+                    return { major: parseInt((t = /(\d+)\.?(\d+)?\.?(\d+)?/.exec(t))[1], 10) || 0, minor: parseInt(t[2], 10) || 0, patch: parseInt(t[3], 10) || 0 };
                 },
             },
             plugins: {
@@ -1593,8 +1593,8 @@ function clearFileInput(t) {
                     for (var a, n = [], i = 0; e.footable.plugins.registered.length > i; i++)
                         try {
                             (a = e.footable.plugins.registered[i]), n.push(new a(t));
-                        } catch (t) {
-                            !0 === e.footable.options.debug && console.error(t);
+                        } catch (r) {
+                            !0 === e.footable.options.debug && console.error(r);
                         }
                     return n;
                 },
@@ -1602,8 +1602,8 @@ function clearFileInput(t) {
                     for (var a = 0; t.plugins.length > a; a++)
                         try {
                             t.plugins[a].init(t);
-                        } catch (t) {
-                            !0 === e.footable.options.debug && console.error(t);
+                        } catch (n) {
+                            !0 === e.footable.options.debug && console.error(n);
                         }
                 },
             },
@@ -1619,112 +1619,114 @@ function clearFileInput(t) {
     })(jQuery, window),
     (function (t, e) {
         if (void 0 === e.footable || null === e.footable) throw Error("Please check and make sure footable.js is included in the page and is loaded prior to this script.");
-        var a = {
-            filter: {
-                enabled: !0,
-                input: ".footable-filter",
-                timeout: 300,
-                minimum: 2,
-                disableEnter: !1,
-                filterFunction: function () {
-                    var e = t(this),
-                        a = e.parents("table:first"),
-                        n = a.data("current-filter").toUpperCase(),
-                        i = e.find("td").text();
-                    return (
-                        a.data("filter-text-only") ||
-                            e.find("td[data-value]").each(function () {
-                                i += t(this).data("value");
+        e.footable.plugins.register(
+            function () {
+                var e = this;
+                (e.name = "Footable Filter"),
+                    (e.init = function (a) {
+                        !0 !== (e.footable = a).options.filter.enabled ||
+                            (!1 !== t(a.table).data("filter") &&
+                                (a.timers.register("filter"),
+                                t(a.table)
+                                    .unbind(".filtering")
+                                    .on({
+                                        "footable_initialized.filtering": function () {
+                                            var n = t(a.table),
+                                                i = {
+                                                    input: n.data("filter") || a.options.filter.input,
+                                                    timeout: n.data("filter-timeout") || a.options.filter.timeout,
+                                                    minimum: n.data("filter-minimum") || a.options.filter.minimum,
+                                                    disableEnter: n.data("filter-disable-enter") || a.options.filter.disableEnter,
+                                                };
+                                            i.disableEnter &&
+                                                t(i.input).keypress(function (t) {
+                                                    return window.event ? 13 !== window.event.keyCode : 13 !== t.which;
+                                                }),
+                                                n.on("footable_clear_filter", function () {
+                                                    t(i.input).val(""), e.clearFilter();
+                                                }),
+                                                n.on("footable_filter", function (t, a) {
+                                                    e.filter(a.filter);
+                                                }),
+                                                t(i.input).keyup(function (n) {
+                                                    a.timers.filter.stop(),
+                                                        27 === n.which && t(i.input).val(""),
+                                                        a.timers.filter.start(function () {
+                                                            var a = t(i.input).val() || "";
+                                                            e.filter(a);
+                                                        }, i.timeout);
+                                                });
+                                        },
+                                        "footable_redrawn.filtering": function () {
+                                            var n = t(a.table).data("filter-string");
+                                            n && e.filter(n);
+                                        },
+                                    })
+                                    .data("footable-filter", e)));
+                    }),
+                    (e.filter = function (a) {
+                        var n,
+                            i = e.footable,
+                            r = t(i.table),
+                            o = r.data("filter-minimum") || i.options.filter.minimum;
+                        ((a = i.raise("footable_filtering", { filter: a, clear: !a })) && !1 === a.result) ||
+                            (a.filter && o > a.filter.length) ||
+                            (a.clear
+                                ? e.clearFilter()
+                                : ((o = a.filter.split(" ")),
+                                  r.find("> tbody > tr").hide().addClass("footable-filtered"),
+                                  (n = r.find("> tbody > tr:not(.footable-row-detail)")),
+                                  t.each(o, function (t, e) {
+                                      e && 0 < e.length && (r.data("current-filter", e), (n = n.filter(i.options.filter.filterFunction)));
+                                  }),
+                                  n.each(function () {
+                                      e.showRow(this, i), t(this).removeClass("footable-filtered");
+                                  }),
+                                  r.data("filter-string", a.filter),
+                                  i.raise("footable_filtered", { filter: a.filter, clear: !1 })));
+                    }),
+                    (e.clearFilter = function () {
+                        var a = e.footable,
+                            n = t(a.table);
+                        n
+                            .find("> tbody > tr:not(.footable-row-detail)")
+                            .removeClass("footable-filtered")
+                            .each(function () {
+                                e.showRow(this, a);
                             }),
-                        0 <= i.toUpperCase().indexOf(n)
-                    );
-                },
+                            n.removeData("filter-string"),
+                            a.raise("footable_filtered", { clear: !0 });
+                    }),
+                    (e.showRow = function (e, a) {
+                        var n = t(e),
+                            i = n.next(),
+                            r = t(a.table);
+                        n.is(":visible") || (r.hasClass("breakpoint") && n.hasClass("footable-detail-show") && i.hasClass("footable-row-detail") ? (n.add(i).show(), a.createOrUpdateDetailRow(e)) : n.show());
+                    });
             },
-        };
-        e.footable.plugins.register(function () {
-            var e = this;
-            (e.name = "Footable Filter"),
-                (e.init = function (a) {
-                    !0 !== (e.footable = a).options.filter.enabled ||
-                        (!1 !== t(a.table).data("filter") &&
-                            (a.timers.register("filter"),
-                            t(a.table)
-                                .unbind(".filtering")
-                                .on({
-                                    "footable_initialized.filtering": function () {
-                                        var n = t(a.table),
-                                            i = {
-                                                input: n.data("filter") || a.options.filter.input,
-                                                timeout: n.data("filter-timeout") || a.options.filter.timeout,
-                                                minimum: n.data("filter-minimum") || a.options.filter.minimum,
-                                                disableEnter: n.data("filter-disable-enter") || a.options.filter.disableEnter,
-                                            };
-                                        i.disableEnter &&
-                                            t(i.input).keypress(function (t) {
-                                                return window.event ? 13 !== window.event.keyCode : 13 !== t.which;
-                                            }),
-                                            n.on("footable_clear_filter", function () {
-                                                t(i.input).val(""), e.clearFilter();
-                                            }),
-                                            n.on("footable_filter", function (t, a) {
-                                                e.filter(a.filter);
-                                            }),
-                                            t(i.input).keyup(function (n) {
-                                                a.timers.filter.stop(),
-                                                    27 === n.which && t(i.input).val(""),
-                                                    a.timers.filter.start(function () {
-                                                        var a = t(i.input).val() || "";
-                                                        e.filter(a);
-                                                    }, i.timeout);
-                                            });
-                                    },
-                                    "footable_redrawn.filtering": function () {
-                                        var n = t(a.table).data("filter-string");
-                                        n && e.filter(n);
-                                    },
-                                })
-                                .data("footable-filter", e)));
-                }),
-                (e.filter = function (a) {
-                    var n,
-                        i = e.footable,
-                        r = t(i.table),
-                        o = r.data("filter-minimum") || i.options.filter.minimum;
-                    ((a = i.raise("footable_filtering", { filter: a, clear: !a })) && !1 === a.result) ||
-                        (a.filter && o > a.filter.length) ||
-                        (a.clear
-                            ? e.clearFilter()
-                            : ((o = a.filter.split(" ")),
-                              r.find("> tbody > tr").hide().addClass("footable-filtered"),
-                              (n = r.find("> tbody > tr:not(.footable-row-detail)")),
-                              t.each(o, function (t, e) {
-                                  e && 0 < e.length && (r.data("current-filter", e), (n = n.filter(i.options.filter.filterFunction)));
-                              }),
-                              n.each(function () {
-                                  e.showRow(this, i), t(this).removeClass("footable-filtered");
-                              }),
-                              r.data("filter-string", a.filter),
-                              i.raise("footable_filtered", { filter: a.filter, clear: !1 })));
-                }),
-                (e.clearFilter = function () {
-                    var a = e.footable,
-                        n = t(a.table);
-                    n
-                        .find("> tbody > tr:not(.footable-row-detail)")
-                        .removeClass("footable-filtered")
-                        .each(function () {
-                            e.showRow(this, a);
-                        }),
-                        n.removeData("filter-string"),
-                        a.raise("footable_filtered", { clear: !0 });
-                }),
-                (e.showRow = function (e, a) {
-                    var n = t(e),
-                        i = n.next(),
-                        r = t(a.table);
-                    n.is(":visible") || (r.hasClass("breakpoint") && n.hasClass("footable-detail-show") && i.hasClass("footable-row-detail") ? (n.add(i).show(), a.createOrUpdateDetailRow(e)) : n.show());
-                });
-        }, a);
+            {
+                filter: {
+                    enabled: !0,
+                    input: ".footable-filter",
+                    timeout: 300,
+                    minimum: 2,
+                    disableEnter: !1,
+                    filterFunction: function () {
+                        var e = t(this),
+                            a = e.parents("table:first"),
+                            n = a.data("current-filter").toUpperCase(),
+                            i = e.find("td").text();
+                        return (
+                            a.data("filter-text-only") ||
+                                e.find("td[data-value]").each(function () {
+                                    i += t(this).data("value");
+                                }),
+                            0 <= i.toUpperCase().indexOf(n)
+                        );
+                    },
+                },
+            }
+        );
     })(jQuery, window),
     (function (t, e) {
         function a(e) {
@@ -1808,9 +1810,9 @@ function clearFileInput(t) {
                             r.preventDefault();
                             var o,
                                 s = t(this).data("page");
-                            r = n.currentPage;
                             if (
-                                ("first" === s
+                                ((r = n.currentPage),
+                                "first" === s
                                     ? (r = 0)
                                     : "prev" === s
                                     ? 0 < r && r--
@@ -1889,7 +1891,7 @@ function clearFileInput(t) {
                                             i,
                                             r = t(n.table),
                                             o = (r.find("> tbody"), n.options.classes.sort);
-                                        if (!1 !== r.data("sort"))
+                                        if (!1 !== r.data("sort")) {
                                             for (var s in (r.find("> thead > tr:last-child > th, > thead > tr:last-child > td").each(function () {
                                                 var e = t(this);
                                                 !0 === n.columns[e.index()].sort.ignore || e.hasClass(o.sortable) || (e.addClass(o.sortable), t("<span />").addClass(o.indicator).appendTo(e));
@@ -1906,6 +1908,7 @@ function clearFileInput(t) {
                                                     e.doSort(a.index, l);
                                                     break;
                                                 }
+                                        }
                                     },
                                     "footable_redrawn.sorting": function () {
                                         var i = t(n.table),
@@ -1930,24 +1933,24 @@ function clearFileInput(t) {
                     }),
                     (e.doSort = function (n, i) {
                         var r = e.footable;
-                        if (!1 !== t(r.table).data("sort")) {
+                        if (!1 !== t(r.table).data("sort") && l) {
                             var o = t(r.table),
                                 s = o.find("> tbody"),
                                 l = r.columns[n],
                                 c = o.find("> thead > tr:last-child > th:eq(" + n + ")"),
-                                d = r.options.classes.sort,
-                                h = r.options.events.sort;
-                            if (((i = i === a ? c.hasClass(d.sorted) : "toggle" === i ? !c.hasClass(d.sorted) : i), !0 === l.sort.ignore)) return !0;
-                            ((n = r.raise(h.sorting, { column: l, direction: i ? "ASC" : "DESC" })) && !1 === n.result) ||
+                                h = r.options.classes.sort,
+                                d = r.options.events.sort;
+                            if (((i = i === a ? c.hasClass(h.sorted) : "toggle" === i ? !c.hasClass(h.sorted) : i), !0 === l.sort.ignore)) return !0;
+                            ((n = r.raise(d.sorting, { column: l, direction: i ? "ASC" : "DESC" })) && !1 === n.result) ||
                                 (o.data("sorted", l.index),
                                 o
                                     .find("> thead > tr:last-child > th, > thead > tr:last-child > td")
                                     .not(c)
-                                    .removeClass(d.sorted + " " + d.descending),
-                                (i = i === a ? c.hasClass(d.sorted) : i) ? c.removeClass(d.descending).addClass(d.sorted) : c.removeClass(d.sorted).addClass(d.descending),
+                                    .removeClass(h.sorted + " " + h.descending),
+                                (i = i === a ? c.hasClass(h.sorted) : i) ? c.removeClass(h.descending).addClass(h.sorted) : c.removeClass(h.sorted).addClass(h.descending),
                                 e.sort(r, s, l, i),
                                 r.bindToggleSelectors(),
-                                r.raise(h.sorted, { column: l, direction: i ? "ASC" : "DESC" }));
+                                r.raise(d.sorted, { column: l, direction: i ? "ASC" : "DESC" }));
                         }
                     }),
                     (e.rows = function (e, n, i) {
@@ -1992,7 +1995,7 @@ function clearFileInput(t) {
         );
     })(jQuery, window),
     (function (t) {
-        "function" == typeof define && define.amd ? define(["jquery"], t) : "object" == typeof exports ? t(require("jquery")) : t(jQuery);
+        "function" == typeof define && define.amd ? define(["jquery"], t) : t("object" == typeof exports ? require("jquery") : jQuery);
     })(function (t, e) {
         var a = "plugin_hideShowPassword",
             n = ["show", "innerToggle"],
@@ -2006,7 +2009,7 @@ function clearFileInput(t) {
                     e = (t = t || document.createElement("body")).appendChild(e);
                     try {
                         e.setAttribute("type", "text");
-                    } catch (t) {
+                    } catch (n) {
                         a = !1;
                     }
                     return t.removeChild(e), a;
@@ -2158,7 +2161,7 @@ function clearFileInput(t) {
                         n[e] = a;
                         break;
                     case "middle":
-                        (n.top = "50%"), (n.marginTop = this.toggleElement.outerHeight() / -2);
+                        (n.top = "50%"), (n.marginTop = -(this.toggleElement.outerHeight() / 2));
                 }
                 return this.toggleElement.css(n);
             },
@@ -2318,32 +2321,33 @@ function clearFileInput(t) {
     (function (t) {
         "use strict";
         t(function () {
-            var e = t("#wpas_ticketlist"),
-                a = t("#wpas_ticketlist > tbody > tr"),
-                n = a.length,
-                i = t("#wpas_ticketlist_filters");
-            !1 !== (e.length && 5 <= n && t.fn.footable && "undefined" != typeof wpas)
-                ? (function () {
-                      var n = t(".wpas-filter-status");
-                      e.footable(),
-                          e.footable().on("footable_filtering", function (t) {
-                              var e = n.find(":selected").val();
-                              e && 0 < e.length && ((t.filter += t.filter && 0 < t.filter.length ? " " + e : e), (t.clear = !t.filter));
-                          });
-                      var i = [],
-                          r = "";
-                      a.each(function (e, a) {
-                          (a = t(a).find(".wpas-label-status").text()), -1 == i.indexOf(a) && (i.push(a), (r += '<option value="' + a + '">' + a + "</option>"));
-                      }),
-                          1 < i.length ? n.append(r) : n.hide(),
-                          n.on("change", function (a) {
-                              a.preventDefault(), e.trigger("footable_filter", { filter: t("#wpas_filter").val() });
-                          }),
-                          t(".wpas-clear-filter").on("click", function (t) {
-                              t.preventDefault(), n.val(""), e.trigger("footable_clear_filter");
-                          });
-                  })()
-                : i.hide();
+            var e,
+                a,
+                n,
+                i = t("#wpas_ticketlist"),
+                r = t("#wpas_ticketlist > tbody > tr"),
+                o = r.length,
+                s = t("#wpas_ticketlist_filters");
+            !1 !== (i.length && 5 <= o && t.fn.footable && "undefined" != typeof wpas)
+                ? ((e = t(".wpas-filter-status")),
+                  i.footable(),
+                  i.footable().on("footable_filtering", function (t) {
+                      var a = e.find(":selected").val();
+                      a && 0 < a.length && ((t.filter += t.filter && 0 < t.filter.length ? " " + a : a), (t.clear = !t.filter));
+                  }),
+                  (a = []),
+                  (n = ""),
+                  r.each(function (e, i) {
+                      (i = t(i).find(".wpas-label-status").text()), -1 == a.indexOf(i) && (a.push(i), (n += '<option value="' + i + '">' + i + "</option>"));
+                  }),
+                  1 < a.length ? e.append(n) : e.hide(),
+                  e.on("change", function (e) {
+                      e.preventDefault(), i.trigger("footable_filter", { filter: t("#wpas_filter").val() });
+                  }),
+                  t(".wpas-clear-filter").on("click", function (t) {
+                      t.preventDefault(), e.val(""), i.trigger("footable_clear_filter");
+                  }))
+                : s.hide();
         });
     })(jQuery),
     (function (t) {
@@ -2367,10 +2371,10 @@ function clearFileInput(t) {
                         n = t('<span class="spinner" style="visibility: visible;margin-left: 0;float: left;margin-top: 0;"></span>');
                     n.insertAfter(a), a.hide();
                     var i = t(this).data("parent_id");
-                    e = t(this).data("att_id");
-                    t.post(wpas.ajaxurl, { action: "wpas_delete_attachment", parent_id: i, att_id: e, att_delete_nonce: wpas.front_delete_att_nonce }, function (t) {
-                        a.show(), n.remove(), t.success && a.closest("li").html(t.data.msg);
-                    });
+                    (e = t(this).data("att_id")),
+                        t.post(wpas.ajaxurl, { action: "wpas_delete_attachment", parent_id: i, att_id: e, att_delete_nonce: wpas.front_delete_att_nonce }, function (t) {
+                            a.show(), n.remove(), t.success && a.closest("li").html(t.data.msg);
+                        });
                 }),
                 t("#wpas-new-reply .wpas-auto-delete-attachments-container input[type=checkbox]").on("change", function () {
                     var e = t(this),
