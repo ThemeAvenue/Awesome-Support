@@ -303,13 +303,13 @@ class WPAS_Tickets_List {
 		$new    = array();
 		$custom = array();
 		$fields = $this->get_custom_fields();
-
+		
 		/**
 		 * Prepare all custom fields that are supposed to show up
 		 * in the admin columns.
 		 */
 		foreach ( $fields as $field ) {
-
+			
 			/* If CF is a regular taxonomy we don't handle it, WordPress does */
 			if ( 'taxonomy' == $field[ 'args' ][ 'field_type' ] && true === $field[ 'args' ][ 'taxo_std' ] ) {
 				continue;
@@ -338,7 +338,7 @@ class WPAS_Tickets_List {
 				$new[ 'title' ] = esc_html__( 'Title', 'awesome-support' );
 
 				if ( array_key_exists( 'ticket_priority', $custom ) ) {
-					$new[ 'ticket_priority' ] = $this->get_cf_title( 'ticket_priority', 'Priority' );
+					$new[ 'ticket_priority' ] = $this->get_cf_title( 'ticket_priority', 'Priority' );		
 				}
 
 				$new[ 'id' ] = esc_html__( 'ID', 'awesome-support' );
@@ -370,8 +370,9 @@ class WPAS_Tickets_List {
 				$new[ 'assignee' ] = $this->get_cf_title( 'assignee', 'Agent' );
 
 				// Add the date
-				$new[ 'date' ] = $columns[ 'date' ];
-
+				$new[ 'date' ] = esc_html__( 'Last modified', 'awesome-support' );
+				
+				// Add the activity
 				$new[ 'wpas-activity' ] = $this->get_cf_title( 'wpas-activity', 'Activity' );
 
 			} else {
@@ -407,7 +408,7 @@ class WPAS_Tickets_List {
 		}
 
 		switch ( $field_title ) {
-			case 'Priority':
+			case 'Priority':			    
 				$translated_field_title = esc_html__( 'Priority', 'awesome-support' );
 				break;
 			case 'Product':
@@ -434,6 +435,7 @@ class WPAS_Tickets_List {
 			case 'Activity':
 				$translated_field_title = esc_html__( 'Activity', 'awesome-support' );
 				break;
+			
 			default:
 				$translated_field_title = esc_html( $field_title );
 				break;
