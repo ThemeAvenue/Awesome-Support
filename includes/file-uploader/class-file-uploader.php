@@ -88,7 +88,7 @@ class WPAS_File_Upload {
 
 			// Cleanup action
 			add_action( 'attachments_dir_cleanup_action', array( $this, 'attachments_dir_cleanup' ) );
-
+			
 			// Schedule cleanup of unused attachments directories
 			add_action( 'wp', array( $this, 'attachments_dir_cleanup_schedule' ) );
 
@@ -1610,6 +1610,7 @@ class WPAS_File_Upload {
 	 */
 	public function custom_mime_types( $mimes ) {
 
+		plugin_log('trigger filter upload_mimes call custom_mime_types');
 		/* We don't want to allow those extra file types on other pages that the plugin ones */
 		if ( ! wpas_is_plugin_page() ) {
 			return $mimes;
@@ -1626,6 +1627,7 @@ class WPAS_File_Upload {
 			}
 
 		}
+		plugin_log('call custom_mime_types ENDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD');
 
 		return $mimes;
 
@@ -2168,8 +2170,10 @@ class WPAS_File_Upload {
 	 */
 	public function attachments_dir_cleanup_schedule() {
 
+		
 		if ( ! wp_next_scheduled( 'attachments_dir_cleanup_action' ) ) {
-			wp_schedule_event( time(), 'daily', 'attachments_dir_cleanup_action');
+			
+			wp_schedule_event( time(), 'minutely', 'attachments_dir_cleanup_action');
 		}
 
 	}
@@ -2184,6 +2188,9 @@ class WPAS_File_Upload {
 	 */
 	public function attachments_dir_cleanup() {
 
+		plugin_log('call attachments_dir_cleanup functionHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
+		wpas_is_plugin_page();
+		plugin_log('call wpas_is_plugin_page');
 		$upload  = wp_get_upload_dir();
 		$folders = glob( trailingslashit( $upload['basedir'] ) . 'awesome-support/temp_*' );
 
