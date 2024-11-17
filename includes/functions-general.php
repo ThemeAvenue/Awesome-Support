@@ -1,14 +1,5 @@
 <?php
-add_filter( 'cron_schedules', 'cron_add_weekly' );
- 
- function cron_add_weekly( $schedules ) {
- 	// Adds once weekly to the existing schedules.
- 	$schedules['minutely'] = array(
- 		'interval' => 60,
- 		'display' => __( 'One minute' )
- 	);
- 	return $schedules;
- }
+
 /**
  * Get plugin option.
  *
@@ -159,7 +150,6 @@ function wpas_get_safe_tags() {
  */
 function wpas_is_plugin_page( $slug = '' ) {
 
-	plugin_log('function general call wpas_is_plugin_page ');
 	global $post;
 
 	$ticket_list   = wpas_get_option( 'ticket_list' );
@@ -207,14 +197,11 @@ function wpas_is_plugin_page( $slug = '' ) {
 
 	} else {
 
-		plugin_log('function general call wpas_is_plugin_page  NOT is_admin, NOT  wpas_is_wp_cli ');
 		global $post;
 
         if ( empty( $post ) ) {
-        	plugin_log('yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy' . json_encode( $_SERVER['REQUEST_URI'] ) );	  
-			  $request_uri = isset($_SERVER['REQUEST_URI']) ? sanitize_file_name( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		plugin_log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' . json_encode( $_SERVER['REQUEST_URI'] ) );	  
-            $post_id  = url_to_postid( '' . '' . '' . $request_uri );
+        	$request_uri = isset($_SERVER['REQUEST_URI']) ? esc_url( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+			$post_id  = url_to_postid( '' . '' . '' . $request_uri );
             $post     = get_post( $post_id );
         }
 
@@ -2105,32 +2092,4 @@ if( !function_exists( 'wpas_window_link' ) ) {
 		return sprintf( '<a href="%s" %s title="%s" class="%s">%s</a>', $link, $data_params, $title, $class, $label );
 
 	}
-
-}
-/**
- * Write an entry to a log file in the uploads directory.
- * 
- * @since x.x.x
- * 
- * @param mixed $entry String or array of the information to write to the log.
- * @param string $file Optional. The file basename for the .log file.
- * @param string $mode Optional. The type of write. See 'mode' at https://www.php.net/manual/en/function.fopen.php.
- * @return boolean|int Number of bytes written to the lof file, false otherwise.
- */
-if ( ! function_exists( 'plugin_log' ) ) {
-  function plugin_log( $entry, $mode = 'a', $file = 'plugin' ) { 
-    // Get WordPress uploads directory.
-    $upload_dir = wp_upload_dir();
-    $upload_dir = $upload_dir['basedir'];
-    // If the entry is array, json_encode.
-    if ( is_array( $entry ) ) { 
-      $entry = json_encode( $entry ); 
-    } 
-    // Write the log file.
-    $file  = $upload_dir . '/' . $file . '.log';
-    $file  = fopen( $file, $mode );
-    $bytes = fwrite( $file, current_time( 'mysql' ) . "::" . $entry . "\n" ); 
-    fclose( $file ); 
-    return $bytes;
-  }
 }
