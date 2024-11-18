@@ -4,7 +4,7 @@ Contributors: awesomesupport,julien731,rwkiii,elindydotcom,SiamKreative,alaca
 Tags: helpdesk,ticket system,support,tickets,support ticket
 Requires at least: 4.0
 Tested up to: 6.6
-Stable tag: 6.3.0.5
+Stable tag: 6.3.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -291,6 +291,9 @@ There are several factors that can influence e-mail notifications delivery. Plea
 
 == Changelog ==
 
+= 6.3.0.6
+
+	* We fixed issue of HTML Formatting Lost in Email Settings After Saving.
 = 6.3.0.5
 	* We fixed issue of Crashing site with an infinite loop.
 	

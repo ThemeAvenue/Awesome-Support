@@ -774,7 +774,7 @@ function wpas_edit_reply( $reply_id = null, $content = '' ) {
 
 	if ( empty( $content ) ) {
 		if ( isset( $_POST['reply_content'] ) ) {
-			$reply = isset($_POST['reply_content'] ) ? sanitize_text_field( wp_unslash( $_POST['reply_content'] ) ) : "";
+			$reply = isset($_POST['reply_content'] ) ? wp_kses_post( wp_unslash( $_POST['reply_content'] ) ) : "";
 			$content = wp_kses( $reply, wp_kses_allowed_html( 'post' ) );
 		} else {
 			return false;
@@ -1942,7 +1942,7 @@ function wpas_edit_ticket_content() {
 	 * Variables!
 	 */
 	$ticket_id = isset( $_POST['post_id'] ) ? sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : '';
-	$content = isset($_POST['content'] ) ? wp_kses_post( sanitize_text_field( wp_unslash( $_POST['content'] ) ) ) : '';
+	$content = isset($_POST['content'] ) ? wp_kses_post(  wp_unslash( $_POST['content'] ) ) : '';
 
 	/**
 	 * Make sure we have ticket ID

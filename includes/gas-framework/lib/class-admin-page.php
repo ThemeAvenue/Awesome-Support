@@ -132,12 +132,12 @@ class GASFrameworkAdminPage {
 
 
 	public function save_single_option( $option ) {
+		
 		if ( empty( $option->settings['id'] ) ) {
 			return;
 		}
-
 		if ( isset( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) ) {
-			$value = sanitize_text_field(wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ));
+			$value = ( isset($option->settings['type']) && $option->settings['type'] == 'editor' ) ? wp_kses_post(wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] )) : sanitize_text_field(wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ));
 		} else {
 			$value = '';
 		}
@@ -163,10 +163,11 @@ class GASFrameworkAdminPage {
 			// we are in a tab
 			if ( ! empty( $activeTab ) ) {
 				foreach ( $activeTab->options as $option ) {
+					
 					$this->save_single_option( $option );
 
 					if ( ! empty( $option->options ) ) {
-						foreach ( $option->options as $group_option ) {
+						foreach ( $option->options as $group_option ) {							
 							$this->save_single_option( $group_option );
 						}
 					}
@@ -174,6 +175,7 @@ class GASFrameworkAdminPage {
 			}
 
 			foreach ( $this->options as $option ) {
+				
 				$this->save_single_option( $option );
 
 				if ( ! empty( $option->options ) ) {
