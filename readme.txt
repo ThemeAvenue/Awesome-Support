@@ -291,6 +291,9 @@ There are several factors that can influence e-mail notifications delivery. Plea
 
 == Changelog ==
 
+= 6.3.0.7
+	* Revised plugin deactivation process with feedback.
+	
 = 6.3.0.6
 
 	* We fixed issue of HTML Formatting Lost in Email Settings After Saving.

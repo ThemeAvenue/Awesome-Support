@@ -5,6 +5,18 @@
 	<div class="row">
 		<div>
 			<div class="about-body">
+				<h1>What's New In 6.3.1</h1>
+				<h3>6.3.1 Revised plugin deactivation process with feedback.</h3>
+				<ul>
+					<li>We updated the plugin deactivation process when you deactivate the plugin and submit a feedback.</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div>
+			<div class="about-body">
 				<h1>What's New In 6.3.0</h1>
 				<h3>6.3.0 Update General Rules and Improve Security, Performance, and Accessibility</h3>
 				<ul>
