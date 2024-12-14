@@ -1097,7 +1097,8 @@ function wpas_users_dropdown( $args = array() ) {
 function wpas_support_users_dropdown( $args = array() ) {
 	$args['cap_exclude'] = 'edit_ticket';
 	$args['cap']         = 'create_ticket';
-	echo wp_kses(wpas_users_dropdown( $args ), get_allowed_html_wp_notifications());
+	//This has been verify by html tags ted.
+	echo wp_kses(wpas_users_dropdown( $args ), wpas_dropdown_allowed_html_tags());
 }
 
 /**

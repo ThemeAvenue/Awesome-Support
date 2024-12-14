@@ -619,7 +619,14 @@ function wpas_dropdown( $args, $options ) {
 		if ( $args['please_select'] ) {
 			echo '<option value="">' . esc_html__( 'Please select', 'awesome-support' ) . '</option>';
 		}
-		echo wp_kses( $options, get_allowed_html_wp_notifications());
+		//This has been verify by html tags ted.
+		$allow_html_tags_wpas_dropdown = array(
+				'option' => [					
+					'value' => true,
+					'selected' => true,								
+				]
+			);
+		echo wp_kses( $options, $allow_html_tags_wpas_dropdown );		
 		?>
 	</select>
 	<?php
@@ -660,11 +667,11 @@ function wpas_tickets_dropdown( $args = array(), $status = '' ) {
 	foreach ( $tickets as $ticket ) {
 		$options .= "<option value='$ticket->ID' " . selected( $args['selected'], $ticket->ID, false ) . ">$ticket->post_title</option>";
 	}
-
-	echo  wp_kses(wpas_dropdown( wp_parse_args( $args, $defaults ), $options ), get_allowed_html_wp_notifications());
+	//This has been verify by html tags ted.		
+	echo  wp_kses(wpas_dropdown( wp_parse_args( $args, $defaults ), $options ), wpas_dropdown_allowed_html_tags() );
 
 }
-
+ 
 /**
  * Generate html markup for drop-downs that pull data from taxonomies
  *
@@ -729,8 +736,8 @@ function wpas_show_assignee_dropdown_simple( $field_id, $class, $new_assignee = 
 		'disabled' => false,
 		'data_attr' => array()
 	);
-
-	echo  wp_kses( wpas_users_dropdown( $args ), get_allowed_html_wp_notifications());
+	//This has been verify by html tags ted.
+	echo  wp_kses( wpas_users_dropdown( $args ), wpas_dropdown_allowed_html_tags());
 
 }
 
@@ -904,7 +911,7 @@ function wpas_hierarchical_taxonomy_dropdown_options( $term, $value, $level = 1 
 	$option .= apply_filters( 'wpas_hierarchical_taxonomy_dropdown_options_label', $term->name, $term, $value, $level );
 	?>
 
-	<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php if( (int) $value === (int) $term->term_id || $value === $term->slug ) { echo 'selected="selected"'; } ?>><?php echo  wp_kses( $option, get_allowed_html_wp_notifications()); ?></option>
+	<option value="<?php echo esc_attr( $term->term_id ); ?>" <?php if( (int) $value === (int) $term->term_id || $value === $term->slug ) { echo 'selected="selected"'; } ?>><?php echo  wp_kses( $option, wpas_dropdown_allowed_html_tags()); ?></option>
 
 	<?php if ( isset( $term->children ) && !empty( $term->children ) ) {
 		++$level;
@@ -2019,7 +2026,7 @@ function wpas_get_popup_window( $id, $content = '', $args = array() ) {
 		<div class="main_heading"><?php echo esc_html( $title ); ?></div>
 		<div class="wpas_mfp_window_wrapper">
 			<div class="wpas_msg"></div>
-			<div class="wpas_window_content"><?php echo  wp_kses( $content, get_allowed_html_wp_notifications());?></div>
+			<div class="wpas_window_content"><?php echo  wp_kses( $content, 'post');?></div> 
 		</div>
 
 	</div>
@@ -2090,6 +2097,374 @@ if( !function_exists( 'wpas_window_link' ) ) {
 		$label = $args['label'];
 
 		return sprintf( '<a href="%s" %s title="%s" class="%s">%s</a>', $link, $data_params, $title, $class, $label );
+
+	}
+}
+if( !function_exists( 'wpas_get_allowed_html_tags' ) ) {
+
+	/**
+	 * Generate link for popup window
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	function wpas_get_allowed_html_tags() {
+
+		
+		$global_html_attributes = [
+			'accesskey' => true,
+			'class' => true,
+			'data-*' => true,
+			'draggable' => true,
+			'dir' => true,
+			'hidden' => true,
+			'id' => true,
+			'lang' => true,
+			'spellcheck' => true,
+			'style' => true,
+			'title' => true,
+			'tabindex' => true,
+			'translate' => true,
+			'enterkeyhint' => true,	
+			'onchange'=> true,	
+			'onclick'=> true,		
+			'onblur'=> true,		
+			'oncontextmenu'=> true,		
+			'oncopy'=> true,	
+			'oncut'=> true,	
+			'ondblclick'=> true,	
+			'ondrag'=> true,	
+			'ondragend'=> true,	
+			'ondragenter'=> true,	
+			'ondragleave'=> true,	
+			'ondragover'=> true,	
+			'ondragstart'=> true,	
+			'ondrop'=> true,	
+			'onfocus'=> true,	
+			'oninput'=> true,	
+			'oninvalid'=> true,	
+			'onkeydown'=> true,
+			'onkeypress'=> true,	
+			'onkeyup'=> true,	
+			'onload'=> true,	
+			'onmousedown'=> true,	
+			'onmousemove'=> true,	
+			'onmouseout'=> true,	
+			'onmouseover'=> true,
+			'onmouseup'=> true,
+			'onmouseover'=> true,
+			'onmousewheel'=> true,
+			'onpaste'=> true,	
+			'onscroll'=> true,
+			/*
+			'data-reply'=> true,
+			'data-title'=> true,
+			'data-placement'=> true,
+			'data-html'=> true,	
+			'data-id'=> true, */				
+		];
+		
+		$gas_allowed_html = [
+			'div' => [
+				'hidefocus' => true,
+				'role' => true,
+				'aria-level' => true,		
+				/* 'data-index' => true,
+				'data-section' => true,
+				'data-type' => true,
+				'data-duid' => true,	
+				'data-src' => true,
+				'data-ticket-id'=> true,
+				'data-enable-paste'=> true,		
+				'data-dz-message'=> true,*/					
+			], 
+			'ul' => [], 
+			'ol' => [], 
+			'li' => [
+				'rel' => true,	
+				/*'data-tab-order' => true,					
+				'data-hint' => true,
+				'value' => true,
+				'data-value' => true,*/			
+			], 
+			'select' => [
+				'autofocus' => true,
+				'disabled' => true,
+				'form' => true,
+				'multiple' => true,
+				'name' => true,			
+				'size' => true,
+				'required' => true,
+				/* 'data-capability' => true,
+				'data-allowClear' => true,
+				'data-placeholder' => true,
+				'data-opt-type' => true,
+				'data-name' => true,
+				'data-default' => true,
+				'data-action' => true,			
+				'data-setting' => true,
+				'data-user-setting' => true,*/ 
+			], 
+			'option' => [
+				'disabled' => true,	
+				'label' => true,	
+				'value' => true,
+				'selected' => true,
+				/* 'data-text' => true,
+				'data-id' => true,*/ 					
+			],
+			'optgroup' => [
+				'disabled' => true,	
+				'label' => true,
+			],		  
+			'input' => [
+				'accept' => true,
+				'alt' => true,
+				'autocomplete' => true,
+				'autofocus' => true,
+				'checked' => true,
+				'dirname' => true,
+				'disabled' => true,
+				'form' => true,
+				'formaction' => true,
+				'height' => true,
+				'list' => true,
+				'maxlength' => true,
+				'min' => true,
+				'multiple' => true,
+				'name' => true,
+				'placeholder' => true,	
+				'size' => true,
+				'src' => true,	
+				'type' => true,			
+				'value' => true,
+				'readonly' => true,	
+				'dirname' => true, 		
+				'width' => true,			
+				'required' => true,	
+				'aria-label' => true,			
+			],  
+			'script' => [	
+				'async' => true,
+				'charset' => true,	
+				'defer' => true,			
+				'src' => true,		
+				'type' => true,							
+			],  
+			'style' => [	
+				'media' => true,
+				'type' => true,	
+			],  
+			'span' => [						
+			],  
+			'img' => [	
+				'alt' => true,	
+				'height' => true,
+				'ismap'=> true,	
+				'sizes'=> true,	
+				'src' => true,	
+				'width' => true,
+				'usemap'=> true,			
+			], 
+			'a' => [
+				'download' => true,
+				'href' => true,
+				'hreflang' => true,	
+				'media' => true,	
+				'rel' => true,
+				'type' => true,
+				'target' => true,			
+			], 
+			'label' => [
+				'for' => true,	
+				'form' => true,				
+			], 
+			'output' => [
+				'for' => true,	
+				'form' => true,	
+			],
+			'fieldset' => [					
+				'disabled' => true,	
+				'form' => true,	
+				'name' => true,	
+			], 
+			'button' => [
+				'autofocus' => true, 
+				'disabled' => true,
+				'form' => true,
+				'formaction' => true,
+				'name' => true,
+				'type' => true,
+				'value' => true,						
+			], 
+			'form' => [
+				'accept-charset' => true,
+				'action' => true,
+				'autocomplete' =>  true,		
+				'enctype' => true,
+				'method' => true,	
+				'name' => true,
+				'novalidate' => true,
+				'onsubmit' => true,	
+				'target' => true,				
+				'rel' => true,
+				'role' => true,			
+			],
+			'textarea' => [
+				'type' => true,
+				'autocomplete' => true,	
+				'autofocus' => true,
+				'cols' => true,		
+				'dirname' => true,
+				'disabled' => true,
+				'form' => true,
+				'maxlength' => true,
+				'name' => true,
+				'rows' => true,	
+				'aria-describedby' => true,	
+				'wrap' => true,				
+				'required' => true,
+				'readonly' => true,
+				'placeholder' => true,	
+				/* 'data-setting' => true,	*/			
+			], 
+			'footer' =>  [],
+			'table' =>  [],
+			'thead' => [],
+			'tbody' => [],
+			'tfoot' => [],
+			'tr' => [], 
+			'th' => [	
+				'colspan' => true, 
+				'headers' => true,
+				'scope' => true, 			
+				'rowspan' => true, 				
+			], 
+			'td' => [
+				'colspan' => true,
+				'headers' => true,  
+				'rowspan' => true, 		
+				'align' => true,
+				'width' => true,								
+			], 
+			'b' => [		
+			],
+			'em' => [],
+			'h1' => [], 
+			'h2' => [], 
+			'h3' => [], 
+			'h4' => [], 
+			'h5' => [], 
+			'h6' => [], 
+			'p' => [], 
+			'code' => [], 
+			'strong' => [], 		
+			'br' => [],
+			'i' => [],
+			'iframe' => [], 
+			'col' => ['span' => true,],		
+			'abbr' => [],
+			'del' => [],		
+			'hr' => [],
+			'acronym' => [],
+		]; 
+		
+		foreach ($gas_allowed_html as $key => $value) {
+			$gas_allowed_html[$key] = array_merge( $global_html_attributes,$value ); 
+		}
+		return $gas_allowed_html;  
+
+	}
+}
+if( !function_exists( 'wpas_dropdown_allowed_html_tags' ) ) {
+
+	/**
+	 * Generate link for popup window
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	function wpas_dropdown_allowed_html_tags() {
+
+		//Gas basic allow html tags for dropdown
+		$gas_wpas_dropdown_allowed_html_tags = [	
+			'select' => [
+				'class' => true,
+				'id' => true,	
+				'multiple' => true,
+				'name' => true,
+				'disabled' => true,			
+				'data-*' => true,		
+			], 
+			'option' => [	
+				'value' => true,
+				'selected' => true,										
+			]
+		];	
+		//Gas add-on allow html tags for dropdown	
+
+		return apply_filters( 'custom_wpas_dropdown_allowed_html_tags', $gas_wpas_dropdown_allowed_html_tags ); 
+
+	}
+}
+if( !function_exists( 'wpas_registration_allowed_html_tags' ) ) {
+
+	/**
+	 * Generate link for popup window
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	function wpas_registration_allowed_html_tags() {
+
+		//Gas basic allow html tags for dropdown
+		$gas_wpas_registration_allowed_html_tags = [	
+			'div' => [
+				'class' => true,
+				'id' => true,	
+			], 
+			'input' => [
+				'value' => true,
+				'type' => true,	
+				'name' => true,
+				'spellcheck' => true,
+				'required' => true,	
+				'placeholder' => true,	
+				'class' => true,
+				'id' => true,
+				'autocomplete' => true,				
+				'accept' => true,
+				'alt' => true,
+				'autofocus' => true,
+				'checked' => true,
+				'dirname' => true,
+				'disabled' => true,
+				'form' => true,
+				'formaction' => true,
+				'height' => true,
+				'list' => true,
+				'maxlength' => true,
+				'min' => true,
+				'multiple' => true,	
+				'size' => true,
+				'src' => true,		
+				'readonly' => true,	
+				'dirname' => true, 		
+				'width' => true,	
+				'aria-label' => true,						
+			],   
+			'label' => [	
+				'for' => true,
+				'class' => true,
+				'id' => true,												
+			]
+		];	
+		//Gas add-on allow html tags for dropdown	
+
+		return apply_filters( 'custom_wpas_registration_allowed_html_tags', $gas_wpas_registration_allowed_html_tags ); 
 
 	}
 }
