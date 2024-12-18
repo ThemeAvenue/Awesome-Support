@@ -2026,7 +2026,7 @@ function wpas_get_popup_window( $id, $content = '', $args = array() ) {
 		<div class="main_heading"><?php echo esc_html( $title ); ?></div>
 		<div class="wpas_mfp_window_wrapper">
 			<div class="wpas_msg"></div>
-			<div class="wpas_window_content"><?php echo  wp_kses( $content, 'post');?></div> 
+			<div class="wpas_window_content"><?php echo  wp_kses( $content, get_allowed_html_wp_notifications() );?></div> 
 		</div>
 
 	</div>

@@ -1,8 +1,7 @@
 <?php
 /* Get the tickets object */
 global $wpas_tickets;
-$cron = new WPAC_Cron();
-		$cron->process();
+
 if ( $wpas_tickets->have_posts() ):
 
 	/* Get list of columns to display */
