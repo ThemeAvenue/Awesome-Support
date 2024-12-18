@@ -498,7 +498,7 @@ function wpas_redirect( $case, $location = null, $post_id = null ) {
  * @param  string $message The message to write
  * @return void
  */
-function wpas_write_log( $handle, $message ) {
+function wpas_write_log( $handle, $message ) {	
 	$log = new WPAS_Logger( $handle );
 	$log->add( $message );
 }
