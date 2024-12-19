@@ -18,7 +18,7 @@
 
             var id    = $(e).attr('id');
             var paste = $(this).data('enable-paste');
-            ticket_id = (  $('#post_ID').length ) ? $('#post_ID').val() : $(this).data('ticket-id');
+            ticket_id = (  $('input[name=ticket_id]').length ) ? $('input[name=ticket_id]').val() : $(this).data('ticket-id');
             var dropzone_id = $(this).attr('id').substr(9);
 
             $('#' + id).dropzone({ 
