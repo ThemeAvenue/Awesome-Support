@@ -899,6 +899,8 @@ class WPAS_File_Upload {
 				'class' => true,
 				'id' => true,
 				'style' => true,
+				'data-ticket-id'=> true,
+				'data-enable-paste'=> true,
 			], 'ul' => [
 				'class' => true,
 				'id' => true,
