@@ -136,11 +136,77 @@ class GASFrameworkAdminPage {
 		if ( empty( $option->settings['id'] ) ) {
 			return;
 		}
+
+		$value = '';	
 		if ( isset( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) ) {
-			$value = ( isset($option->settings['type']) && $option->settings['type'] == 'editor' ) ? wp_kses_post(wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] )) : sanitize_text_field(wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ));
-		} else {
-			$value = '';
-		}
+
+			if ( !empty( $option->settings['type'] ) ) {	
+				
+				switch ( $option->settings['type'] ) {
+
+					case 'heading':	
+					case 'note':
+					case 'text':
+					case 'checkbox':
+					case 'radio':
+					case 'number':
+					case 'upload':
+					case 'color':
+					case 'custom':
+					case 'warningmessage':
+					case 'enable': //awesome-support-tasks-and-todos , awesome-support-service-level-agreements
+					case 'date':  //awesome-support-service-level-agreements
+					case 'email-test-config': //awesome-support-email-support
+						$value = sanitize_text_field( wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) );
+					    break;
+
+					case 'select':
+					    if( !is_array( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) )
+						{
+							$value = sanitize_text_field( wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) );
+						}
+						else
+						{
+							$value = array_map('sanitize_text_field' , wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ]  ) );
+						}					    
+					    break;
+					
+					case 'textarea':
+					    $value = sanitize_textarea_field( wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) );
+					    break;					
+					  
+					case 'editor':					    
+						$value = wp_kses_post( wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ));		
+					    break;						    
+					
+					case 'multicheck':
+					    //reports-and-statistics
+						if( !is_array( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) )
+						{
+							$value = sanitize_text_field( wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) );
+						}
+						else
+						{
+							$value = array_map('sanitize_text_field' , wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ]  ) );
+						}					    
+					    break;
+					default:
+					    $value = sanitize_text_field( wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) );
+				}
+
+			}
+			else
+			{
+				if( !is_array( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) )
+				{
+					$value = sanitize_text_field(wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ] ) );
+				}
+				else
+				{
+					$value = array_map('sanitize_text_field' , wp_unslash( $_POST[ $this->getOptionNamespace() . '_' . $option->settings['id'] ]  ) );
+				}
+			}
+		}		
 
 		$option->setValue( $value );
 	}
@@ -167,7 +233,7 @@ class GASFrameworkAdminPage {
 					$this->save_single_option( $option );
 
 					if ( ! empty( $option->options ) ) {
-						foreach ( $option->options as $group_option ) {							
+						foreach ( $option->options as $group_option ) {												
 							$this->save_single_option( $group_option );
 						}
 					}
@@ -175,7 +241,6 @@ class GASFrameworkAdminPage {
 			}
 
 			foreach ( $this->options as $option ) {
-				
 				$this->save_single_option( $option );
 
 				if ( ! empty( $option->options ) ) {
@@ -275,8 +340,7 @@ class GASFrameworkAdminPage {
 		}
 
 		do_action( 'tf_admin_options_saved_' . $this->getOptionNamespace() );
-
-		wp_redirect( esc_url_raw( $url ) );
+		wp_redirect( esc_url_raw( $url ) );		
 	}
 
 	private function verifySecurity() {
