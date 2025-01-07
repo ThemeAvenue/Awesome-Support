@@ -39,8 +39,8 @@ if ( ! function_exists( 'tf_hex2rgb' ) ) {
  *
  * @return true Will always return true.
  */
-if ( ! function_exists( 'tf_add_action_once' ) ) {
-	function tf_add_action_once( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
+if ( ! function_exists( 'gas_tf_add_action_once' ) ) {
+	function gas_tf_add_action_once( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
 		global $_gambitFiltersRan;
 
 		if ( ! isset( $_gambitFiltersRan ) ) {
@@ -84,8 +84,8 @@ if ( ! function_exists( 'tf_add_action_once' ) ) {
  *
  * @return true
  */
-if ( ! function_exists( 'tf_add_filter_once' ) ) {
-	function tf_add_filter_once( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
+if ( ! function_exists( 'gas_tf_add_filter_once' ) ) {
+	function gas_tf_add_filter_once( $tag, $function_to_add, $priority = 10, $accepted_args = 1 ) {
 		global $_gambitFiltersRan;
 
 		if ( ! isset( $_gambitFiltersRan ) ) {
@@ -119,8 +119,8 @@ if ( ! function_exists( 'tf_add_filter_once' ) ) {
  * @param boolean $public - Queries the get_post_types to fetch publicly-available post types.
  * @param string $value - Fetches post types that are builtin, custom, or both. Values can be 'builtin', 'custom', or the default value, 'all'.
  */
-if ( ! function_exists( 'tf_get_post_types' ) ) {
-	function tf_get_post_types( $public = true, $value = 'all' ) {
+if ( ! function_exists( 'gas_tf_get_post_types' ) ) {
+	function gas_tf_get_post_types( $public = true, $value = 'all' ) {
 
 		// Fetch builtin post types.
 		$args_builtin = array(
