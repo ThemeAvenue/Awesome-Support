@@ -1022,7 +1022,7 @@
 	function wpas_cf_display_time_hhmm( $field, $post_id ) {
 
 		$minutes = (int) get_post_meta( $post_id, '_wpas_' . $field, true );
-
+		
 		if ( ! empty( $minutes ) ) {
 			echo wp_kses(sprintf( "%02d:%02d", floor( $minutes / 60 ), ( $minutes ) % 60 ), get_allowed_html_wp_notifications());
 		}
