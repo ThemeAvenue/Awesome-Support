@@ -185,8 +185,8 @@ function wpas_add_custom_taxonomy( $name, $args = array() ) {
  *
  * @return  int|array           Returns result of add/update post meta
  */
-function wpas_update_time_spent_on_ticket( $value, $post_id, $field_id, $field ) {
-
+function wpas_update_time_spent_on_ticket( $value, $post_id, $field_id, $field ) {	
+	
 	// Default to saved value unchanged
 	$result = 0;
 
@@ -200,32 +200,41 @@ function wpas_update_time_spent_on_ticket( $value, $post_id, $field_id, $field )
 	// Time spent on ticket (hh:mm:ss)
 	sscanf( sanitize_file_name( wp_unslash( $_POST['wpas_ttl_calculated_time_spent_on_ticket'] ) ), "%d:%d", $hours, $minutes );
 
+	
 	// Convert to seconds
 	$minutes = $hours * 60 + $minutes;
+
+	
 
 	// Calculate time adjustment
 	if( isset ( $_POST['wpas_ttl_adjustments_to_time_spent_on_ticket'] )
 		&& ! empty( $_POST['wpas_ttl_adjustments_to_time_spent_on_ticket'] )
 	) {
 		sscanf( sanitize_file_name( wp_unslash( $_POST['wpas_ttl_adjustments_to_time_spent_on_ticket'] ) ), "%d:%d", $adj_hours, $adj_minutes );
+		
+
 		$adjustment_time = $adj_hours * 60 + $adj_minutes;
 
+		
 		if( isset($_POST['wpas_time_adjustments_pos_or_neg']) && '+' === $_POST['wpas_time_adjustments_pos_or_neg'] ) {
 			$minutes += $adjustment_time;
 		}
 		else {
 			$minutes -= $adjustment_time;
 		}
+		
 	}
 
+	
 	/**
 	 * Get the current field value.
 	 */
 	$current = get_post_meta( $post_id, $field_id, true );
+	
 
 	/* Action: Update post meta */
 	if ( ( ! empty( $current ) || is_null( $current ) ) && ! empty( $minutes ) ) {
-		if ( $current !== $minutes ) {
+		if ( $current !== $minutes ) {		
 			if ( false !== update_post_meta( $post_id, $field_id, $minutes, $current ) ) {
 				$result = 2;
 			}
@@ -233,7 +242,7 @@ function wpas_update_time_spent_on_ticket( $value, $post_id, $field_id, $field )
 	}
 
 	/* Action: Add post meta */
-	elseif ( empty( $current ) && ! empty( $minutes ) ) {
+	elseif ( empty( $current ) && ! empty( $minutes ) ) {		
 		if ( false !== add_post_meta( $post_id, $field_id, $minutes, true ) ) {
 			$result = 1;
 		}
@@ -787,8 +796,7 @@ function wpas_register_core_fields() {
 		'placeholder'		=> 'hh:mm',
 		'hide_front_end'	=> true,
 		'backend_only'		=> true,
-		'backend_display_type'	=> 'custom',
-		//'column_callback'   => 'wpas_cf_display_time_hhmm',
+		'backend_display_type'	=> 'custom',		
 		'column_callback'   => 'wpas_cf_display_time_adjustment_column',
 		'save_callback'     => 'wpas_cf_save_time_hhmm',
 		'sortable_column'	=> true,
@@ -825,7 +833,7 @@ function wpas_register_core_fields() {
 		'sortable_column'	=> true,
 		'title'       		=> $as_label_for_final_time_singular,
 		'desc'       		=> __( 'This is the time calculated by the system - a sum of gross time and adjustments/credits granted.', 'awesome-support' ),						
-		'save_callback'     => 'wpas_update_time_spent_on_ticket',
+		//'save_callback'     => 'wpas_update_time_spent_on_ticket',
 		'readonly'          => true,
 	) );
 	
