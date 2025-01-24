@@ -189,42 +189,38 @@ function wpas_update_time_spent_on_ticket( $value, $post_id, $field_id, $field )
 	
 	// Default to saved value unchanged
 	$result = 0;
-
+	/* Ted disable the process saving time tracking =============
+	
 	// No time spent on this ticket
 	if ( ! isset ($_POST['wpas_ttl_calculated_time_spent_on_ticket']) ) {
 		return $result;
 	}
 
 	$hours = $minutes = $adj_hours = $adj_minutes = 0;
-
+	
 	// Time spent on ticket (hh:mm:ss)
 	sscanf( sanitize_file_name( wp_unslash( $_POST['wpas_ttl_calculated_time_spent_on_ticket'] ) ), "%d:%d", $hours, $minutes );
-
 	
 	// Convert to seconds
-	$minutes = $hours * 60 + $minutes;
-
-	
+	$minutes = $hours * 60 + $minutes;	
 
 	// Calculate time adjustment
 	if( isset ( $_POST['wpas_ttl_adjustments_to_time_spent_on_ticket'] )
 		&& ! empty( $_POST['wpas_ttl_adjustments_to_time_spent_on_ticket'] )
 	) {
-		sscanf( sanitize_file_name( wp_unslash( $_POST['wpas_ttl_adjustments_to_time_spent_on_ticket'] ) ), "%d:%d", $adj_hours, $adj_minutes );
-		
+		sscanf( sanitize_file_name( wp_unslash( $_POST['wpas_ttl_adjustments_to_time_spent_on_ticket'] ) ), "%d:%d", $adj_hours, $adj_minutes );		
 
 		$adjustment_time = $adj_hours * 60 + $adj_minutes;
-
 		
 		if( isset($_POST['wpas_time_adjustments_pos_or_neg']) && '+' === $_POST['wpas_time_adjustments_pos_or_neg'] ) {
 			$minutes += $adjustment_time;
 		}
 		else {
 			$minutes -= $adjustment_time;
-		}
-		
+		}		
 	}
-
+	
+	*/
 	
 	/**
 	 * Get the current field value.
@@ -785,7 +781,8 @@ function wpas_register_core_fields() {
 		'sortable_column'	=> true,
 		'title'       		=> $as_label_for_gross_time_singular,
 		'desc'       		=> __( 'Enter the cummulative time spent on ticket by the agent', 'awesome-support' ),
-		'readonly'			=> $allow_agents_to_enter_time
+		'readonly'			=> $allow_agents_to_enter_time,
+		'display_email_template' => 'wpas_cf_email_display_time_hhmm'
 	) );
 
 	wpas_add_custom_field( 'ttl_adjustments_to_time_spent_on_ticket', array(
@@ -802,7 +799,8 @@ function wpas_register_core_fields() {
 		'sortable_column'	=> true,
 		'title'       		=> $as_label_for_time_adjustments_singular,
 		'desc'       		=> __( 'Enter any adjustments or credits granted to the customer - generally filled in by a supervisor or admin.', 'awesome-support' ),
-		'readonly'			=> $allow_agents_to_enter_time
+		'readonly'			=> $allow_agents_to_enter_time,
+		'display_email_template' => 'wpas_cf_email_display_time_hhmm'
 	) );
 	
 	wpas_add_custom_field( 'time_adjustments_pos_or_neg', array(
@@ -833,8 +831,9 @@ function wpas_register_core_fields() {
 		'sortable_column'	=> true,
 		'title'       		=> $as_label_for_final_time_singular,
 		'desc'       		=> __( 'This is the time calculated by the system - a sum of gross time and adjustments/credits granted.', 'awesome-support' ),						
-		//'save_callback'     => 'wpas_update_time_spent_on_ticket',
+		'save_callback'     => 'wpas_update_time_spent_on_ticket',
 		'readonly'          => true,
+		'display_email_template' => 'wpas_cf_email_display_time_hhmm'
 	) );
 	
 	wpas_add_custom_field( 'time_notes', array(
