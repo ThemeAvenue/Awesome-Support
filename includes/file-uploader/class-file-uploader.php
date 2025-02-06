@@ -819,7 +819,8 @@ class WPAS_File_Upload {
 			require_once(ABSPATH . '/wp-admin/includes/file.php');
 			WP_Filesystem();
 		} 
-		
+
+		//Process Unauthenticated Sensitive Information Exposure Through Unprotected Directory with htaccess
 		if ( $wp_filesystem->is_writable($dir) ) {
 
 			$filename = $dir . '/.htaccess';
@@ -839,6 +840,43 @@ class WPAS_File_Upload {
 			// folder isn't writable so no point in attempting to do it...
 			// log the error in our log files instead...
 			wpas_write_log('file-uploader','The folder ' . $dir . ' is not writable.  So we are unable to write a .htaccess file to this folder' ) ;
+		}
+
+		//Process Unauthenticated Sensitive Information Exposure Through Unprotected Directory with index
+		if ( $wp_filesystem->is_writable($dir) ) {
+
+			$filename = $dir  . '/index.php';	
+			$filecontents = str_replace('\n', PHP_EOL, '<?php\n\n// Silence is golden');			
+
+			if ( ! file_exists( $filename ) ) {
+				$result = $wp_filesystem->put_contents($filename, $filecontents, FS_CHMOD_FILE);
+				if ( $result === false ) {
+					wpas_write_log('file-uploader','unable to write .index file to folder ' . $dir ) ;
+				}
+			}
+		} else {
+			// folder isn't writable so no point in attempting to do it...
+			// log the error in our log files instead...
+			wpas_write_log('file-uploader','The folder ' . $dir . ' is not writable.  So we are unable to write a .index file to this folder' ) ;
+		}
+		
+		$found_pos =  strpos( $dir, 'uploads/awesome-support' );
+		$attachments_root = substr($dir, 0, $found_pos ) .'uploads/awesome-support';
+		if ( $wp_filesystem->is_writable($attachments_root) ) {
+
+			$filename = $attachments_root  . '/index.php';				
+			$filecontents = str_replace('\n', PHP_EOL, '<?php\n\n// Silence is golden');			
+
+			if ( ! file_exists( $filename ) ) {
+				$result = $wp_filesystem->put_contents($filename, $filecontents, FS_CHMOD_FILE);				
+				if ( $result === false ) {
+					wpas_write_log('file-uploader','unable to write .index file to  awesome-support folder ' . $attachments_root ) ;
+				}
+			}
+		} else {
+			// folder isn't writable so no point in attempting to do it...
+			// log the error in our log files instead...
+			wpas_write_log('file-uploader','The folder ' . $attachments_root . ' is not writable.  So we are unable to write a .index file to awesome-support folder' ) ;
 		}
 
 	}

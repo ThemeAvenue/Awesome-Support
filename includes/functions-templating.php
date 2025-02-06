@@ -1030,6 +1030,28 @@
 
 	}
 
+	/***
+	 * Display integer as hh:mm:ss
+	 *
+	 * @since 3.3.5
+	 *
+	 * @param $field
+	 *
+	 * @param $post_id
+	 */
+	function wpas_cf_email_display_time_hhmm( $field, $post_id ) {
+
+		$minutes = (int) get_post_meta( $post_id, '_wpas_' . $field, true );
+		$adjustment_operator = ($minutes < 0 ) ? '-' : ''; 
+		$minutes = ($minutes < 0 ) ? $minutes * (-1) : (int)$minutes;
+		if ( ! empty( $minutes ) ) {
+			return wp_kses(sprintf( $adjustment_operator."%02dh:%02dm", floor( $minutes / 60 ), ( $minutes ) % 60 ), get_allowed_html_wp_notifications());
+		}
+
+		return $minutes;
+
+	}
+
 	/**
 	 * Display time adjustment column
 	 *
