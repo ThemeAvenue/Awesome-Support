@@ -2071,7 +2071,10 @@ class WPAS_File_Upload {
 
 					// Move file from temp dir to ticket dir
 					$wp_filesystem->move($file, $new_file_upload); 
-
+					
+					//Set 0644 file permission to allow access the attachment. 
+					$wp_filesystem->chmod($new_file_upload, FS_CHMOD_FILE); 
+					
 					// Update attached file post meta data
 					update_attached_file($attachment_id, $new_file_relative);
 
